@@ -1,26 +1,662 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Tea Shop design system
+ * ----------------------
+ * Serif display type + light grotesk UI on warm "rice paper" neutrals,
+ * deep tea-ink text, matcha as the primary action colour and a few soft,
+ * playful accents (yuzu, sakura, hojicha). Pill-shaped controls, soft
+ * rounded cards, hairline borders, generous fluid spacing.
+ */
 
+/* Fonts are loaded with next/font in app/layout.tsx and exposed as CSS vars. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-cormorant), "Iowan Old Style", Georgia, "Songti SC", "Noto Serif SC", serif;
+  --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@theme {
+  /* ---------- Colour ---------- */
+  /* Neutrals: warm paper surfaces */
+  --color-paper: #f6f2e8; /* page background */
+  --color-cream: #fbf8f1; /* raised surfaces: cards, header, inputs */
+  --color-mist: #ebe8de; /* muted surfaces, image placeholders */
+
+  /* Ink: text on paper */
+  --color-ink: #1e2a1f; /* headings, primary text */
+  --color-ink-soft: #4b5048; /* body copy, secondary text */
+  --color-ink-faint: #7d8078; /* captions, placeholders, disabled */
+
+  /* Brand */
+  --color-matcha: #3f6b45; /* primary actions, links */
+  --color-matcha-deep: #2a4a30; /* hover / pressed */
+  --color-matcha-pale: #dde5cf; /* soft fills, selected states */
+
+  /* Playful accents: use sparingly for highlights, badges, section fills */
+  --color-yuzu: #f2e2a0;
+  --color-sakura: #efd6cc;
+  --color-hojicha: #a8745a;
+
+  /* Lines */
+  --color-line: rgb(30 42 31 / 0.14); /* default hairline */
+  --color-line-strong: rgb(30 42 31 / 0.32); /* outlined controls */
+
+  /* Feedback */
+  --color-danger: #a4453a;
+  --color-success: var(--color-matcha);
+
+  /* ---------- Typography (fluid) ---------- */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.4;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.55;
+  --text-base: 1rem;
+  --text-base--line-height: 1.7;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.65;
+  --text-lead: clamp(1.125rem, 1.03rem + 0.4vw, 1.375rem);
+  --text-lead--line-height: 1.6;
+
+  --text-display-sm: clamp(1.375rem, 1.25rem + 0.5vw, 1.625rem);
+  --text-display-sm--line-height: 1.25;
+  --text-display-md: clamp(1.75rem, 1.5rem + 1vw, 2.375rem);
+  --text-display-md--line-height: 1.15;
+  --text-display-lg: clamp(2.25rem, 1.8rem + 2vw, 3.5rem);
+  --text-display-lg--line-height: 1.05;
+  --text-display-xl: clamp(2.75rem, 2rem + 3.5vw, 5rem);
+  --text-display-xl--line-height: 1;
+  --text-display-2xl: clamp(3.25rem, 2.2rem + 5vw, 6.5rem);
+  --text-display-2xl--line-height: 0.95;
+
+  --tracking-display: -0.015em;
+  --tracking-ui: 0.02em;
+  --tracking-label: 0.14em;
+
+  /* ---------- Spacing & layout ---------- */
+  --spacing-gutter: clamp(1rem, 0.5rem + 2.5vw, 3rem); /* container side padding */
+  --spacing-section: clamp(4rem, 2.5rem + 6vw, 8.5rem); /* vertical section rhythm */
+  --spacing-section-sm: clamp(2.5rem, 1.75rem + 3vw, 4.5rem);
+  --spacing-grid: clamp(1rem, 0.6rem + 1.6vw, 2rem); /* grid gaps */
+
+  --container-page: 82rem; /* 1312px main content */
+  --container-wide: 100rem; /* full-bleed-ish bands */
+  --container-prose: 42rem; /* long-form reading */
+
+  /* ---------- Shape ---------- */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem; /* inputs, small tiles */
+  --radius-lg: 1rem; /* product media */
+  --radius-card: 1.5rem; /* cards, panels */
+  --radius-panel: 2.25rem; /* large feature panels */
+  --radius-pill: 999px; /* buttons, chips, badges */
+
+  --shadow-soft: 0 1px 2px rgb(30 42 31 / 0.04), 0 8px 24px -12px rgb(30 42 31 / 0.18);
+  --shadow-lift: 0 2px 4px rgb(30 42 31 / 0.05), 0 18px 40px -18px rgb(30 42 31 / 0.3);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-line);
+  }
+
+  html {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    color: var(--color-ink-soft);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: var(--tracking-display);
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+  h1 {
+    font-size: var(--text-display-xl);
+    line-height: var(--text-display-xl--line-height);
+  }
+  h2 {
+    font-size: var(--text-display-lg);
+    line-height: var(--text-display-lg--line-height);
+  }
+  h3 {
+    font-size: var(--text-display-md);
+    line-height: var(--text-display-md--line-height);
+  }
+  h4 {
+    font-size: var(--text-display-sm);
+    line-height: var(--text-display-sm--line-height);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  hr {
+    border-top-width: 1px;
+  }
+
+  ::selection {
+    background-color: var(--color-yuzu);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-matcha);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    ::before,
+    ::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ---------- Typography primitives ----------
+ * These set type only, never colour, so a text-* utility can recolour them
+ * (e.g. `heading-hero text-cream` over a photo). Headings get ink from base.
+ */
+
+/* Hero headline: light, oversized serif. */
+@utility heading-hero {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--text-display-2xl);
+  line-height: var(--text-display-2xl--line-height);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* Italic serif kicker above headings ("Where to begin"-style). */
+@utility eyebrow {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-lg);
+  line-height: 1.3;
+}
+
+/* Small uppercase sans label: nav meta, table heads, product metadata. */
+@utility label {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+@utility lead {
+  font-size: var(--text-lead);
+  line-height: var(--text-lead--line-height);
+  font-weight: 300;
+}
+
+/* Prices and other figures that should align. */
+@utility price {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: var(--tracking-ui);
+}
+
+/* Long-form content (product stories, brewing guides). */
+@utility prose-tea {
+  max-width: var(--container-prose);
+  font-size: var(--text-lg);
+  line-height: 1.75;
+
+  & > * + * {
+    margin-top: 1.25em;
+  }
+  & :where(h2, h3, h4) {
+    margin-top: 2em;
+  }
+  & :where(h2, h3, h4) + * {
+    margin-top: 0.75em;
+  }
+  & :where(a) {
+    @apply link;
+  }
+  & :where(ul, ol) {
+    padding-left: 1.25em;
+  }
+  & :where(ul) {
+    list-style: disc;
+  }
+  & :where(ol) {
+    list-style: decimal;
+  }
+  & :where(li::marker) {
+    color: var(--color-matcha);
+  }
+  & :where(blockquote) {
+    border-left: 2px solid var(--color-matcha-pale);
+    padding-left: 1.25em;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--text-display-sm);
+    line-height: 1.4;
+    color: var(--color-ink);
+  }
+}
+
+/* ---------- Links ---------- */
+
+/* Inline text link: thin, offset underline that firms up on hover. */
+@utility link {
+  color: var(--color-matcha);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  transition:
+    color 150ms ease,
+    text-decoration-color 150ms ease;
+
+  &:hover {
+    color: var(--color-matcha-deep);
+    text-decoration-color: currentColor;
+  }
+}
+
+/* Quiet link for nav and footers: no underline until hover. */
+@utility link-quiet {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 150ms ease;
+
+  &:hover,
+  &[aria-current="page"] {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* "Browse all →" call-to-action link. Put the arrow in a child <span aria-hidden>. */
+@utility link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: 500;
+  letter-spacing: var(--tracking-ui);
+  color: var(--color-ink);
+
+  & > [aria-hidden] {
+    transition: transform 250ms var(--ease-out-soft);
+  }
+  &:hover > [aria-hidden] {
+    transform: translateX(0.3em);
+  }
+}
+
+/* ---------- Buttons ---------- */
+
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: var(--btn-height, 3rem);
+  padding-inline: var(--btn-px, 1.75rem);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: var(--btn-font-size, 0.9375rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: var(--tracking-ui);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease,
+    transform 200ms var(--ease-out-soft);
+
+  &:active {
+    transform: translateY(1px);
+  }
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+}
+
+/* Filled matcha: the one main action per view (Add to cart, Checkout). */
+@utility btn-primary {
+  @apply btn;
+  background-color: var(--color-matcha);
+  color: var(--color-cream);
+
+  &:hover {
+    background-color: var(--color-matcha-deep);
+  }
+}
+
+/* Ink-filled: strong neutral action. */
+@utility btn-ink {
+  @apply btn;
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+
+  &:hover {
+    background-color: var(--color-matcha-deep);
+  }
+}
+
+/* Outlined hairline pill: secondary actions ("See more", "View details"). */
+@utility btn-outline {
+  @apply btn;
+  border-color: var(--color-line-strong);
+  color: var(--color-ink);
+
+  &:hover {
+    border-color: var(--color-ink);
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+  }
+}
+
+/* Soft cream pill: playful, low-emphasis tiles (category shortcuts, filters). */
+@utility btn-soft {
+  @apply btn;
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-soft);
+
+  &:hover {
+    background-color: var(--color-matcha-pale);
+  }
+}
+
+/* Frosted button for use over photography. */
+@utility btn-glass {
+  @apply btn;
+  background-color: rgb(255 255 255 / 0.16);
+  border-color: rgb(255 255 255 / 0.4);
+  color: var(--color-white);
+  backdrop-filter: blur(10px);
+
+  &:hover {
+    background-color: rgb(255 255 255 / 0.9);
+    color: var(--color-ink);
+  }
+}
+
+/* Size modifiers set variables so they win regardless of utility order. */
+@utility btn-sm {
+  --btn-height: 2.25rem;
+  --btn-px: 1.125rem;
+  --btn-font-size: var(--text-sm);
+}
+
+@utility btn-lg {
+  --btn-height: 3.5rem;
+  --btn-px: 2.25rem;
+  --btn-font-size: 1rem;
+}
+
+/* Round icon-only button (cart, search, close). Always pair with aria-label. */
+@utility btn-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background-color 200ms ease;
+
+  &:hover {
+    background-color: var(--color-mist);
+  }
+}
+
+/* ---------- Badges & chips ---------- */
+
+/* Small uppercase pill for product/event tags. */
+@utility badge {
+  @apply label;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  font-size: 0.6875rem;
+  line-height: 1;
+}
+
+@utility badge-soft {
+  @apply badge;
+  background-color: var(--color-matcha-pale);
+  color: var(--color-matcha-deep);
+}
+
+@utility badge-yuzu {
+  @apply badge;
+  background-color: var(--color-yuzu);
+  color: var(--color-ink);
+}
+
+/* Selectable filter pill. Use aria-pressed / aria-selected for the active state. */
+@utility chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding-inline: 1.125rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+
+  &:hover {
+    border-color: var(--color-line-strong);
+  }
+  &[aria-pressed="true"],
+  &[aria-selected="true"] {
+    background-color: var(--color-ink);
+    border-color: var(--color-ink);
+    color: var(--color-cream);
+  }
+}
+
+/* ---------- Surfaces & borders ---------- */
+
+@utility card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  background-color: var(--color-cream);
+}
+
+/* Colour-blocked feature panel (e.g. bg-matcha-pale, bg-sakura, bg-ink text-cream). */
+@utility panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-panel);
+  padding: clamp(1.5rem, 1rem + 3vw, 4rem);
+}
+
+/* Product/editorial image frame: portrait 4:5 on a muted surface. */
+@utility media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-mist);
+
+  & > img,
+  & > video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms var(--ease-out-soft);
+  }
+}
+
+/* Slow zoom on the nearest .group hover — for product cards. */
+@utility media-zoom {
+  @apply media;
+
+  :where(.group):hover & > img {
+    transform: scale(1.04);
+  }
+}
+
+@utility divider {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--color-line);
+}
+
+@utility input {
+  width: 100%;
+  min-height: 3rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  transition: border-color 150ms ease;
+
+  &::placeholder {
+    color: var(--color-ink-faint);
+  }
+  &:hover {
+    border-color: var(--color-ink-soft);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--color-matcha);
+    outline-offset: 1px;
+    border-color: var(--color-matcha);
+  }
+}
+
+/* ---------- Layout primitives ---------- */
+
+/* Centered page container with fluid side gutters. */
+@utility container-page {
+  width: 100%;
+  max-width: calc(var(--container-page) + 2 * var(--spacing-gutter));
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+@utility container-wide {
+  width: 100%;
+  max-width: calc(var(--container-wide) + 2 * var(--spacing-gutter));
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+@utility container-prose {
+  width: 100%;
+  max-width: calc(var(--container-prose) + 2 * var(--spacing-gutter));
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Vertical section rhythm. */
+@utility section {
+  padding-block: var(--spacing-section);
+}
+
+@utility section-sm {
+  padding-block: var(--spacing-section-sm);
+}
+
+/* Product grid: 2 cols up to tablets, 4 on desktop (even steps avoid orphans). */
+@utility grid-products {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--spacing-grid);
+  row-gap: calc(var(--spacing-grid) * 2);
+
+  @variant lg {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Editorial / category cards: as many ≥18rem columns as fit. */
+@utility grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--spacing-grid);
+}
+
+/* Two-up split (image + text) that stacks on small screens. */
+@utility split {
+  display: grid;
+  gap: var(--spacing-grid);
+  align-items: center;
+
+  @variant lg {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: calc(var(--spacing-grid) * 2.5);
+  }
+}
+
+/* Horizontal scroll row with snap — carousels and chip rows on mobile.
+ * Set item width with --rail-item, e.g. `[--rail-item:70%] lg:[--rail-item:1fr]`. */
+@utility rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(--rail-item, minmax(16rem, 1fr));
+  gap: var(--spacing-grid);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+
+  & > * {
+    scroll-snap-align: start;
+  }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
