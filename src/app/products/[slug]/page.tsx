@@ -8,27 +8,16 @@ import { ProductGallery } from "@/components/product/gallery";
 import { SectionHeading } from "@/components/section-heading";
 import { StockStatus } from "@/components/stock-status";
 import { TastingNotes } from "@/components/tasting-notes";
-import {
-  collectionOf,
-  formatPrice,
-  getProduct,
-  products,
-  relatedProducts,
-  stockState,
-  type Product,
-} from "@/lib/catalog";
+import { formatPrice, stockState, type Product } from "@/lib/catalog";
+import { getProduct, getRelatedProducts } from "@/lib/catalog-queries";
 
-// Only the slugs in the catalog exist; anything else is a 404.
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return products.map((product) => ({ slug: product.slug }));
-}
+// Rendered per request so stock is always current; unknown slugs 404 below.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
 }: PageProps<"/products/[slug]">): Promise<Metadata> {
-  const product = getProduct((await params).slug);
+  const product = await getProduct((await params).slug);
   if (!product) return {};
 
   const description = product.description.split(". ")[0] + ".";
@@ -40,12 +29,12 @@ export async function generateMetadata({
 }
 
 export default async function ProductPage({ params }: PageProps<"/products/[slug]">) {
-  const product = getProduct((await params).slug);
+  const product = await getProduct((await params).slug);
   if (!product) notFound();
 
-  const collection = collectionOf(product);
+  const collection = product.category;
   const images = [product.image, ...(product.gallery ?? [])];
-  const related = relatedProducts(product);
+  const related = await getRelatedProducts(product);
 
   return (
     <>
@@ -103,7 +92,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
 }
 
 function ProductSummary({ product }: { product: Product }) {
-  const collection = collectionOf(product);
+  const collection = product.category;
 
   return (
     <div className="flex flex-col gap-5">
@@ -127,7 +116,7 @@ function ProductSummary({ product }: { product: Product }) {
 
       <div className="flex flex-col gap-2">
         <p className="flex items-baseline gap-2">
-          <span className="price text-3xl text-ink">{formatPrice(product.price)}</span>
+          <span className="price text-3xl text-ink">{formatPrice(product.priceCents)}</span>
           <span className="text-ink-faint">/ {product.unit}</span>
         </p>
         <StockStatus product={product} detailed />
@@ -173,7 +162,7 @@ function PurchaseForm({ product }: { product: Product }) {
             ))}
           </select>
           <button type="button" className="btn-primary btn-lg flex-1">
-            Add to bag · {formatPrice(product.price)}
+            Add to bag · {formatPrice(product.priceCents)}
           </button>
         </form>
       )}
@@ -213,7 +202,7 @@ function ProductFacts({ product }: { product: Product }) {
       <Disclosure title={product.brew ? "Storage" : "Care"}>
         <p>
           {product.brew
-            ? product.collection === "puer"
+            ? product.category.slug === "puer"
               ? "Keep pu’er away from light and strong smells, with a little airflow and steady humidity. Cakes can be stored for years and will keep developing."
               : "Store airtight, away from light, heat and strong smells. Best enjoyed within a year of opening."
             : "Rinse with hot water after each session and let it air-dry with the lid off. Avoid soap on unglazed clay — it absorbs flavour."}

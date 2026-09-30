@@ -4,9 +4,13 @@ import Link from "next/link";
 import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
 import { TastingNotes } from "@/components/tasting-notes";
-import { bestsellers, formatPrice, photos, spotlight, teaware } from "@/lib/catalog";
+import { formatPrice, merchandising, photos } from "@/lib/catalog";
+import { getProduct, getProductsByCategory, getProductsBySlugs } from "@/lib/catalog-queries";
 
-export function Bestsellers() {
+export async function Bestsellers() {
+  const bestsellers = await getProductsBySlugs(merchandising.bestsellers);
+  if (bestsellers.length === 0) return null;
+
   return (
     <section className="container-page pb-section">
       <SectionHeading
@@ -26,14 +30,17 @@ export function Bestsellers() {
   );
 }
 
-const spotlightSpecs = [
-  { term: "Origin", detail: spotlight.origin },
-  { term: "Harvest", detail: "Spring 2024, charcoal roasted" },
-  { term: "Water", detail: "100 °C · 100 ml gaiwan" },
-  { term: "Leaf", detail: "7 g · 8+ infusions" },
-];
+export async function ProductSpotlight() {
+  const spotlight = await getProduct(merchandising.spotlight);
+  if (!spotlight) return null;
 
-export function ProductSpotlight() {
+  const spotlightSpecs = [
+    { term: "Origin", detail: spotlight.origin },
+    { term: "Harvest", detail: "Spring 2024, charcoal roasted" },
+    { term: "Water", detail: "100 °C · 100 ml gaiwan" },
+    { term: "Leaf", detail: "7 g · 8+ infusions" },
+  ];
+
   return (
     <section className="container-wide">
       <div className="panel bg-matcha-pale">
@@ -90,7 +97,7 @@ export function ProductSpotlight() {
 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
               <p className="flex items-baseline gap-2">
-                <span className="price text-2xl text-ink">{formatPrice(spotlight.price)}</span>
+                <span className="price text-2xl text-ink">{formatPrice(spotlight.priceCents)}</span>
                 <span className="text-sm text-ink-faint">/ {spotlight.unit}</span>
               </p>
               {/* Cart isn't wired up yet. */}
@@ -108,7 +115,10 @@ export function ProductSpotlight() {
   );
 }
 
-export function TeawareRow() {
+export async function TeawareRow() {
+  const teaware = await getProductsByCategory("teaware");
+  if (teaware.length === 0) return null;
+
   return (
     <section className="section">
       <div className="container-page">

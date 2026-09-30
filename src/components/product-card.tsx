@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { StockStatus } from "@/components/stock-status";
-import { collectionOf, formatPrice, stockState, type Product } from "@/lib/catalog";
+import { formatPrice, stockState, type Product } from "@/lib/catalog";
 
 const badgeClass = {
   New: "badge-soft",
@@ -44,7 +44,7 @@ export function ProductCard({
 
       <div className="flex flex-col gap-1.5">
         <p className="flex items-baseline justify-between gap-2 text-ink-faint">
-          <span className="label">{collectionOf(product).name}</span>
+          <span className="label">{product.category.name}</span>
           {product.nameZh && (
             <span lang="zh-Hans" className="font-display text-sm">
               {product.nameZh}
@@ -59,7 +59,7 @@ export function ProductCard({
               {product.name}
             </Link>
           </h3>
-          <p className="price shrink-0 text-[0.9375rem] text-ink">{formatPrice(product.price)}</p>
+          <p className="price shrink-0 text-[0.9375rem] text-ink">{formatPrice(product.priceCents)}</p>
         </div>
         <p className="text-sm text-ink-soft">
           {product.notes.join(" · ")}

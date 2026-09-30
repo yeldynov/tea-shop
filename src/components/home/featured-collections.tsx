@@ -2,9 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { LeafIcon } from "@/components/icons";
-import { collections } from "@/lib/catalog";
+import type { Category } from "@/lib/catalog";
+import { getCategories } from "@/lib/catalog-queries";
 
-export function CategoryPills() {
+export async function CategoryPills() {
+  const collections = await getCategories();
+
   return (
     <nav aria-label="Shop by type" className="container-page pt-8 md:pt-10">
       <ul className="-mx-gutter flex gap-2.5 overflow-x-auto px-gutter pb-1 [scrollbar-width:none] lg:mx-0 lg:flex-wrap lg:justify-center lg:px-0">
@@ -21,9 +24,10 @@ export function CategoryPills() {
   );
 }
 
-export function FeaturedCollections() {
+export async function FeaturedCollections() {
   // Lead tile + four; teaware has its own row further down the page.
-  const [lead, ...rest] = collections.filter((c) => c.slug !== "teaware");
+  const [lead, ...rest] = (await getCategories()).filter((c) => c.slug !== "teaware");
+  if (!lead) return null;
 
   return (
     <section className="container-page section">
@@ -56,7 +60,7 @@ function CollectionTile({
   collection,
   large = false,
 }: {
-  collection: (typeof collections)[number];
+  collection: Category;
   large?: boolean;
 }) {
   return (
