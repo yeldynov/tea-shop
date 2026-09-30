@@ -1,9 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { newArrival as featured, photos } from "@/lib/catalog";
+import { merchandising, photos } from "@/lib/catalog";
+import { getProduct } from "@/lib/catalog-queries";
 
-export function Hero() {
+export async function Hero() {
+  const featured = await getProduct(merchandising.newArrival);
+
   return (
     <section className="container-wide pt-3 md:pt-4">
       <div className="relative isolate flex min-h-[max(34rem,min(calc(100svh-9rem),54rem))] items-end overflow-hidden rounded-card md:rounded-panel">
@@ -36,25 +39,27 @@ export function Hero() {
           </div>
 
           {/* Small floating product note — a playful counterpoint to the big type. */}
-          <Link
-            href={`/products/${featured.slug}`}
-            className="group hidden w-72 shrink-0 items-center gap-4 rounded-card bg-cream/90 p-3 pr-5 text-ink shadow-lift backdrop-blur-md transition-colors hover:bg-cream lg:flex"
-          >
-            <div className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-mist">
-              <Image
-                src={featured.image.src}
-                alt=""
-                fill
-                sizes="80px"
-                className="object-cover"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="label text-matcha">Just landed</span>
-              <span className="font-display text-xl leading-tight">{featured.name}</span>
-              <span className="text-sm text-ink-soft">{featured.origin}</span>
-            </div>
-          </Link>
+          {featured && (
+            <Link
+              href={`/products/${featured.slug}`}
+              className="group hidden w-72 shrink-0 items-center gap-4 rounded-card bg-cream/90 p-3 pr-5 text-ink shadow-lift backdrop-blur-md transition-colors hover:bg-cream lg:flex"
+            >
+              <div className="relative size-20 shrink-0 overflow-hidden rounded-lg bg-mist">
+                <Image
+                  src={featured.image.src}
+                  alt=""
+                  fill
+                  sizes="80px"
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="label text-matcha">Just landed</span>
+                <span className="font-display text-xl leading-tight">{featured.name}</span>
+                <span className="text-sm text-ink-soft">{featured.origin}</span>
+              </div>
+            </Link>
+          )}
         </div>
       </div>
     </section>

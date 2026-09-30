@@ -3,6 +3,9 @@ import { CategoryPills, FeaturedCollections } from "@/components/home/featured-c
 import { Hero } from "@/components/home/hero";
 import { Bestsellers, ProductSpotlight, TeawareRow } from "@/components/home/product-sections";
 
+// Catalog sections read from the database on every request.
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <>
