@@ -56,12 +56,15 @@ export async function FeaturedCollections() {
   );
 }
 
-function CollectionTile({
+export function CollectionTile({
   collection,
   large = false,
+  compact = false,
 }: {
   collection: Category;
   large?: boolean;
+  /** Name only, for narrow tiles in a row of many. */
+  compact?: boolean;
 }) {
   return (
     <Link
@@ -74,7 +77,13 @@ function CollectionTile({
         src={collection.image.src}
         alt={collection.image.alt}
         fill
-        sizes={large ? "(min-width: 64rem) 50vw, 100vw" : "(min-width: 64rem) 25vw, 50vw"}
+        sizes={
+          large
+            ? "(min-width: 64rem) 50vw, 100vw"
+            : compact
+              ? "(min-width: 64rem) 18vw, (min-width: 40rem) 42vw, 68vw"
+              : "(min-width: 64rem) 25vw, 50vw"
+        }
         className="-z-20 object-cover transition-transform duration-700 ease-out-soft group-hover:scale-105"
       />
       <div className="absolute inset-0 -z-10 bg-linear-to-t from-ink/70 via-ink/10 to-transparent" />
@@ -86,16 +95,20 @@ function CollectionTile({
               {collection.nameZh}
             </span>
           </h3>
-          <p className={`text-cream/80 ${large ? "text-base" : "hidden text-sm sm:block"}`}>
-            {collection.blurb}
-          </p>
+          {!compact && (
+            <p className={`text-cream/80 ${large ? "text-base" : "hidden text-sm sm:block"}`}>
+              {collection.blurb}
+            </p>
+          )}
         </div>
-        <span
-          aria-hidden
-          className="hidden size-10 shrink-0 place-items-center rounded-full border border-cream/40 transition-colors group-hover:bg-cream group-hover:text-ink sm:grid"
-        >
-          →
-        </span>
+        {!compact && (
+          <span
+            aria-hidden
+            className="hidden size-10 shrink-0 place-items-center rounded-full border border-cream/40 transition-colors group-hover:bg-cream group-hover:text-ink sm:grid"
+          >
+            →
+          </span>
+        )}
       </div>
     </Link>
   );

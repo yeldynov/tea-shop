@@ -34,7 +34,7 @@ Next.js 16 (App Router, React 19) + TypeScript + Tailwind CSS v4, Better Auth, D
   - Schema changes use versioned migrations: `db:generate`, review the SQL, commit `drizzle/`, then `db:migrate`. Don't use `db:push`.
   - Homepage merchandising picks (bestsellers, spotlight, new arrival) are slug constants in `catalog.ts`, not DB columns.
   - The UI and URLs call categories "collections" (`/collections/*`); the database calls them `categories`.
-- **Site-wide copy and navigation** live in `src/lib/site.ts` (`site`, `mainNav`, `footerNav`). Many nav links point to routes that don't exist yet (`/shop`, `/collections/*`, `/journal`, …). Only `/` and `/products/[slug]` are implemented.
+- **Site-wide copy and navigation** live in `src/lib/site.ts` (`site`, `mainNav`, `footerNav`). Many nav links point to routes that don't exist yet (`/journal`, `/help`, `/cart`, …). Only `/`, `/shop`, `/search`, `/new-arrivals`, `/collections/[slug]` and `/products/[slug]` are implemented.
 - **Cart/checkout isn't wired up.** The product page purchase form renders UI states only.
 - **Database:** `src/db/index.ts` exports `db` as a lazy Proxy so importing it (e.g. through the auth route during `next build`) doesn't require `DATABASE_URL`. Keep that property: don't touch the DB at module top level. `src/db/schema.ts` is the single schema entry point used by drizzle-kit, the Drizzle client, and the Better Auth adapter. Generated auth tables must be re-exported from it.
 - **Auth:** `src/lib/auth.ts` (server, Drizzle adapter, `nextCookies()` must stay the last plugin), `src/lib/auth-client.ts` (React client), mounted at `src/app/api/auth/[...all]/route.ts`.

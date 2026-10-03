@@ -5,7 +5,12 @@ import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
 import { TastingNotes } from "@/components/tasting-notes";
 import { formatPrice, merchandising, photos } from "@/lib/catalog";
-import { getProduct, getProductsByCategory, getProductsBySlugs } from "@/lib/catalog-queries";
+import {
+  getNewArrivals,
+  getProduct,
+  getProductsByCategory,
+  getProductsBySlugs,
+} from "@/lib/catalog-queries";
 
 export async function Bestsellers() {
   const bestsellers = await getProductsBySlugs(merchandising.bestsellers);
@@ -21,6 +26,29 @@ export async function Bestsellers() {
       />
       <ul className="grid-products">
         {bestsellers.map((product) => (
+          <li key={product.slug}>
+            <ProductCard product={product} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+export async function NewArrivals() {
+  const arrivals = await getNewArrivals(4);
+  if (arrivals.length === 0) return null;
+
+  return (
+    <section className="container-page pt-section">
+      <SectionHeading
+        eyebrow="Just landed"
+        title="New arrivals"
+        href="/new-arrivals"
+        cta="Shop new arrivals"
+      />
+      <ul className="grid-products">
+        {arrivals.map((product) => (
           <li key={product.slug}>
             <ProductCard product={product} />
           </li>

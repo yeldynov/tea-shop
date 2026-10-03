@@ -17,6 +17,7 @@ export const footerNav = [
     title: "Shop",
     links: [
       { label: "All tea", href: "/shop" },
+      { label: "New arrivals", href: "/new-arrivals" },
       { label: "Pu’er", href: "/collections/puer" },
       { label: "Oolong", href: "/collections/oolong" },
       { label: "Black tea", href: "/collections/black-tea" },
