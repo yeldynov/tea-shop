@@ -8,9 +8,13 @@ import {
   jsonb,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
   timestamp,
+  uuid,
 } from "drizzle-orm/pg-core";
+
+import { user } from "./auth-schema";
 
 const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -80,6 +84,68 @@ export const productStock = pgTable(
   (t) => [check("product_stock_quantity_nonnegative", sql`${t.quantity} >= 0`)],
 );
 
+export const orderStatus = pgEnum("order_status", ["pending", "paid", "failed", "expired"]);
+
+// Created as `pending` when checkout starts, in the same batch that reserves the
+// stock. Only Stripe (webhook or a server-side session lookup) moves it to
+// `paid`; `failed`/`expired` give the reserved stock back (see `lib/orders.ts`).
+export const orders = pgTable(
+  "orders",
+  {
+    // Generated in the app so the order, its items and the stock update fit in one db.batch().
+    id: uuid("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "restrict" }),
+    status: orderStatus("status").notNull().default("pending"),
+    currency: text("currency").notNull().default("usd"),
+    /** From our prices when checkout started; Stripe must charge exactly this. */
+    subtotalCents: integer("subtotal_cents").notNull(),
+    /** What Stripe reports as charged, once paid. */
+    amountTotalCents: integer("amount_total_cents"),
+    email: text("email"),
+    shippingAddress: jsonb("shipping_address").$type<{
+      name: string;
+      address: {
+        line1: string | null;
+        line2: string | null;
+        city: string | null;
+        state: string | null;
+        postal_code: string | null;
+        country: string | null;
+      };
+    }>(),
+    stripeCheckoutSessionId: text("stripe_checkout_session_id").unique(),
+    stripePaymentIntentId: text("stripe_payment_intent_id").unique(),
+    paidAt: timestamp("paid_at", { withTimezone: true }),
+    ...timestamps,
+  },
+  (t) => [
+    index("orders_user_id_idx").on(t.userId),
+    check("orders_subtotal_cents_nonnegative", sql`${t.subtotalCents} >= 0`),
+  ],
+);
+
+/** Name and price are snapshots, so later catalog edits don't rewrite past orders. */
+export const orderItems = pgTable(
+  "order_items",
+  {
+    orderId: uuid("order_id")
+      .notNull()
+      .references(() => orders.id, { onDelete: "cascade" }),
+    productId: integer("product_id")
+      .notNull()
+      .references(() => products.id, { onDelete: "restrict" }),
+    name: text("name").notNull(),
+    unitPriceCents: integer("unit_price_cents").notNull(),
+    quantity: integer("quantity").notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orderId, t.productId] }),
+    check("order_items_quantity_positive", sql`${t.quantity} > 0`),
+  ],
+);
+
 export const categoriesRelations = relations(categories, ({ many }) => ({
   products: many(products),
 }));
@@ -91,6 +157,15 @@ export const productsRelations = relations(products, ({ one }) => ({
 
 export const productStockRelations = relations(productStock, ({ one }) => ({
   product: one(products, { fields: [productStock.productId], references: [products.id] }),
+}));
+
+export const ordersRelations = relations(orders, ({ many }) => ({
+  items: many(orderItems),
+}));
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+  order: one(orders, { fields: [orderItems.orderId], references: [orders.id] }),
+  product: one(products, { fields: [orderItems.productId], references: [products.id] }),
 }));
 
 export * from "./auth-schema";

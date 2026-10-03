@@ -1,7 +1,7 @@
 // The original sample catalog, loaded into the database by `pnpm db:seed`.
 import { unsplash, type Category, type Product } from "@/lib/catalog";
 
-export type SeedProduct = Omit<Product, "category"> & {
+export type SeedProduct = Omit<Product, "id" | "category"> & {
   /** Category slug. */
   category: string;
 };

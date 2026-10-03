@@ -17,7 +17,7 @@ The package manager is pnpm (pinned via `packageManager` in `package.json`). Don
 
 There is no test runner configured.
 
-Env: copy `.env.example` to `.env.local` and set `DATABASE_URL` (Neon pooled connection string), `BETTER_AUTH_SECRET` and `BETTER_AUTH_URL`. `drizzle.config.ts` reads `.env.local` then `.env`.
+Env: copy `.env.example` to `.env.local` and set `DATABASE_URL` (Neon pooled connection string), `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`. For local webhooks run `stripe listen --forward-to localhost:3000/api/stripe/webhook`. `drizzle.config.ts` reads `.env.local` then `.env`.
 
 ## Stack
 
@@ -34,8 +34,14 @@ Next.js 16 (App Router, React 19) + TypeScript + Tailwind CSS v4, Better Auth, D
   - Schema changes use versioned migrations: `db:generate`, review the SQL, commit `drizzle/`, then `db:migrate`. Don't use `db:push`.
   - Homepage merchandising picks (bestsellers, spotlight, new arrival) are slug constants in `catalog.ts`, not DB columns.
   - The UI and URLs call categories "collections" (`/collections/*`); the database calls them `categories`.
-- **Site-wide copy and navigation** live in `src/lib/site.ts` (`site`, `mainNav`, `footerNav`). Many nav links point to routes that don't exist yet (`/journal`, `/help`, `/checkout`, …). Only `/`, `/shop`, `/search`, `/new-arrivals`, `/cart`, `/collections/[slug]`, `/products/[slug]`, `/sign-in`, `/sign-up`, `/account` and `/admin` are implemented.
-- **Cart** is an httpOnly `cart` cookie holding only `{ slug: quantity }` (`src/lib/cart.ts`), so guests can use it and there's no cart table. Prices and stock are never stored there. `getCart()` (`src/lib/cart-queries.ts`) joins it to the catalog on every render and clamps quantities to `min(stock, 10)`. Only the server actions in `src/app/cart/actions.ts` write the cookie, and they re-check stock on every call. Stock isn't reserved: checkout (not built yet, no Stripe) must decrement it atomically. `pnpm tsx src/lib/cart.check.ts` asserts the cart rules.
+- **Site-wide copy and navigation** live in `src/lib/site.ts` (`site`, `mainNav`, `footerNav`). Many nav links point to routes that don't exist yet (`/journal`, `/help`, …). Only `/`, `/shop`, `/search`, `/new-arrivals`, `/cart`, `/checkout/*`, `/account/orders/[id]`, `/collections/[slug]`, `/products/[slug]`, `/sign-in`, `/sign-up`, `/account` and `/admin` are implemented.
+- **Cart** is an httpOnly `cart` cookie holding only `{ slug: quantity }` (`src/lib/cart.ts`), so guests can use it and there's no cart table. Prices and stock are never stored there. `getCart()` (`src/lib/cart-queries.ts`) joins it to the catalog on every render and clamps quantities to `min(stock, 10)`. Only the server actions in `src/app/cart/actions.ts` write the cookie, and they re-check stock on every call. Adding to the bag doesn't reserve stock; checkout does. `pnpm tsx src/lib/cart.check.ts` asserts the cart rules.
+- **Checkout** (Stripe Checkout, hosted): `startCheckout` (`src/app/checkout/actions.ts`) takes no input. It builds the order and the Stripe line items (`price_data`) from `getCart()`, never from the client.
+  - The order (`orders` + `order_items`, which keep a snapshot of name and price) is created `pending` together with the stock reservation, in one `db.batch()`. `product_stock`'s non-negative CHECK makes the reservation all-or-nothing.
+  - Only Stripe marks an order `paid`: `syncOrderFromCheckoutSession` (`src/lib/orders.ts`) reads the session from the Stripe API. It's called by the webhook (`src/app/api/stripe/webhook/route.ts`) and by `/checkout/success`.
+  - `checkout.session.expired`, `checkout.session.async_payment_failed` and `/checkout/cancel` call `releaseOrder`, which returns the stock.
+  - Every status change is a single `… where status = 'pending'` statement, so duplicate webhooks are harmless. Keep it that way.
+  - Link to `/checkout/cancel` with `<a>`, not `<Link>`: a prefetch would cancel the order.
 - **Database:** `src/db/index.ts` exports `db` as a lazy Proxy so importing it (e.g. through the auth route during `next build`) doesn't require `DATABASE_URL`. Keep that property: don't touch the DB at module top level. `src/db/schema.ts` is the single schema entry point used by drizzle-kit, the Drizzle client, and the Better Auth adapter. Generated auth tables must be re-exported from it.
 - **Auth:** `src/lib/auth.ts` (server, Drizzle adapter, `nextCookies()` must stay the last plugin), `src/lib/auth-client.ts` (React client), mounted at `src/app/api/auth/[...all]/route.ts`.
   - Email/password plus Google (enabled only when `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` are set). Sign-in/up/out forms call `authClient` (`src/app/(auth)/auth-forms.tsx`) so requests go through `/api/auth/*`, where Better Auth's rate limiting and origin checks run. Server-side `auth.api.*` calls skip rate limiting, so don't use them for credential checks.

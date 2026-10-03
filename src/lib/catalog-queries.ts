@@ -29,6 +29,7 @@ type ProductRow = typeof products.$inferSelect & {
 
 function toProduct(row: ProductRow): Product {
   return {
+    id: row.id,
     slug: row.slug,
     name: row.name,
     nameZh: row.nameZh ?? undefined,

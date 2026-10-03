@@ -4,16 +4,31 @@ import Link from "next/link";
 
 import { clearCart, removeFromCart } from "@/app/cart/actions";
 import { CartLineQuantity } from "@/app/cart/cart-line-quantity";
+import { startCheckout } from "@/app/checkout/actions";
+import { FormMessage } from "@/components/form-field";
 import { getCart, type CartLine } from "@/lib/cart-queries";
 import { formatPrice } from "@/lib/catalog";
+import { getPendingOrders } from "@/lib/orders";
+import { getSession } from "@/lib/session";
 
 // Per request: the cart comes from the cookie, prices and stock from the database.
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = { title: "Your bag" };
 
-export default async function CartPage() {
-  const { lines, subtotalCents, itemCount } = await getCart();
+const errors = {
+  stock: "Some items sold out or have less stock than your bag asks for. Check your bag and try again.",
+  checkout: "We couldn’t start checkout. Please try again in a moment.",
+};
+
+export default async function CartPage({ searchParams }: PageProps<"/cart">) {
+  const { error } = await searchParams;
+  const session = await getSession();
+  const [{ lines, subtotalCents, itemCount }, pending] = await Promise.all([
+    getCart(),
+    session ? getPendingOrders(session.user.id) : [],
+  ]);
+  const errorMessage = typeof error === "string" ? errors[error as keyof typeof errors] : undefined;
 
   return (
     <div className="container-page section-sm">
@@ -23,6 +38,20 @@ export default async function CartPage() {
         </p>
         <h1>{itemCount > 0 ? `${itemCount} ${itemCount === 1 ? "item" : "items"}` : "Your bag"}</h1>
       </header>
+
+      <div className="mb-8 flex flex-col gap-3 empty:hidden">
+        {errorMessage && <FormMessage tone="error">{errorMessage}</FormMessage>}
+        {pending[0] && (
+          // Stock for an unfinished checkout stays reserved; say so, or the bag looks sold out.
+          <p role="status" className="rounded-md bg-yuzu/30 px-4 py-3 text-sm text-ink">
+            You have an unfinished checkout, and its items are held for you until it expires.
+            Checking out again releases them.{" "}
+            <a href={`/checkout/cancel?order=${pending[0].id}`} className="link">
+              Cancel it now
+            </a>
+          </p>
+        )}
+      </div>
 
       {lines.length === 0 ? (
         <div className="flex flex-col items-start gap-5">
@@ -52,10 +81,18 @@ export default async function CartPage() {
               <dt className="text-ink-soft">Subtotal</dt>
               <dd className="price text-2xl text-ink">{formatPrice(subtotalCents)}</dd>
             </dl>
-            <p className="text-sm text-ink-faint">Shipping and taxes are calculated at checkout.</p>
-            <button type="button" className="btn-primary btn-lg" disabled>
-              Checkout coming soon
-            </button>
+            <p className="text-sm text-ink-faint">You’ll enter your shipping address and pay on Stripe’s secure page.</p>
+            {session ? (
+              <form action={startCheckout}>
+                <button type="submit" className="btn-primary btn-lg w-full">
+                  Checkout · {formatPrice(subtotalCents)}
+                </button>
+              </form>
+            ) : (
+              <Link href="/sign-in?next=/cart" className="btn-primary btn-lg">
+                Sign in to check out
+              </Link>
+            )}
           </aside>
         </div>
       )}

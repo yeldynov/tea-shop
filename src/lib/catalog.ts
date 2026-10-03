@@ -15,6 +15,7 @@ export type Category = {
 };
 
 export type Product = {
+  id: number;
   slug: string;
   name: string;
   nameZh?: string;
