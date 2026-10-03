@@ -4,19 +4,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { formatPrice } from "@/lib/catalog";
-import { getOrderForUser } from "@/lib/orders";
+import { getOrderForUser, orderStatusLabels } from "@/lib/orders";
 import { requireUser } from "@/lib/session";
 
 export const metadata: Metadata = { title: "Order", robots: { index: false } };
 
-const statusCopy = {
+const statusText = {
   pending: {
-    label: "Confirming payment",
     text: "We’re waiting for Stripe to confirm your payment. This usually takes a few seconds.",
   },
-  paid: { label: "Paid", text: "Thank you! Your order is confirmed and will ship within 2 working days." },
-  failed: { label: "Payment failed", text: "Your payment didn’t go through, so nothing was charged." },
-  expired: { label: "Cancelled", text: "This checkout was cancelled or timed out. Nothing was charged." },
+  paid: { text: "Thank you! Your order is confirmed and will ship within 2 working days." },
+  failed: { text: "Your payment didn’t go through, so nothing was charged." },
+  expired: { text: "This checkout was cancelled or timed out. Nothing was charged." },
 } as const;
 
 const placedOn = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
@@ -28,14 +27,14 @@ export default async function OrderPage({ params }: PageProps<"/account/orders/[
   const order = /^[0-9a-f-]{36}$/.test(id) ? await getOrderForUser(id, user.id) : undefined;
   if (!order) notFound();
 
-  const status = statusCopy[order.status];
+  const status = statusText[order.status];
   const address = order.shippingAddress;
 
   return (
     <>
       <header className="flex flex-col gap-3">
         <p className="eyebrow">Order · {placedOn.format(order.createdAt)}</p>
-        <h1>{status.label}</h1>
+        <h1>{orderStatusLabels[order.status]}</h1>
         <p className="lead">{status.text}</p>
         {order.status === "pending" && (
           <Link href={`/account/orders/${order.id}`} className="link-arrow self-start text-sm">
@@ -100,8 +99,8 @@ export default async function OrderPage({ params }: PageProps<"/account/orders/[
         </section>
       )}
 
-      <Link href="/shop" className="link-arrow self-start">
-        Continue shopping <span aria-hidden>→</span>
+      <Link href="/account/orders" className="link-arrow self-start">
+        <span aria-hidden>←</span> All orders
       </Link>
     </>
   );

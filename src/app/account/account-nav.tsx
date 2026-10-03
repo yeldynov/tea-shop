@@ -7,6 +7,7 @@ import { SignOutButton } from "@/components/sign-out-button";
 
 const items = [
   { label: "Overview", href: "/account" },
+  { label: "Orders", href: "/account/orders" },
   { label: "Account details", href: "/account/details" },
 ];
 
@@ -22,7 +23,11 @@ export function AccountNav() {
             <Link
               href={item.href}
               className="chip"
-              aria-current={pathname === item.href ? "page" : undefined}
+              aria-current={
+                pathname === item.href || (item.href !== "/account" && pathname.startsWith(`${item.href}/`))
+                  ? "page"
+                  : undefined
+              }
             >
               {item.label}
             </Link>

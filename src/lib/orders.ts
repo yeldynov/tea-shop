@@ -21,6 +21,21 @@ export async function getOrderForUser(orderId: string, userId: string) {
   });
 }
 
+export const orderStatusLabels = {
+  pending: "Confirming payment",
+  paid: "Paid",
+  failed: "Payment failed",
+  expired: "Cancelled",
+} as const;
+
+export async function getOrdersForUser(userId: string) {
+  return db.query.orders.findMany({
+    where: eq(orders.userId, userId),
+    orderBy: desc(orders.createdAt),
+    with: { items: { columns: { quantity: true } } },
+  });
+}
+
 export async function getPendingOrders(userId: string) {
   return db.query.orders.findMany({
     where: and(eq(orders.userId, userId), eq(orders.status, "pending")),
