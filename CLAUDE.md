@@ -42,6 +42,7 @@ Next.js 16 (App Router, React 19) + TypeScript + Tailwind CSS v4, Better Auth, D
   - Authorization is server-side via `src/lib/session.ts`: call `requireUser(path)` or `requireAdmin()` at the top of every protected page **and** every protected server action/route handler. Don't rely on layouts (they don't re-run on navigation). Non-admins get a 404 from `/admin`.
   - `user.role` is `"customer"` by default and can't be set by clients (`input: false`). Promote admins with SQL: `update "user" set role = 'admin' where email = '…'`.
   - Redirect targets from user input go through `safeNext()` (same-site paths only).
+  - The header's account card (`src/components/user-menu.tsx`) reads the session on the server via `getSession()`. No client auth state. It's a CSS-only `:hover`/`:focus-within` dropdown. Use the same pattern for the cart: server-side data in the header, no client store.
 - **Images** come from Unsplash via the `unsplash()` helper in `catalog.ts`. `next.config.ts` allowlists only `images.unsplash.com/photo-*` for `next/image`.
 
 ## Design system

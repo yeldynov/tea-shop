@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { BagIcon, CloseIcon, MenuIcon, SearchIcon, UserIcon } from "@/components/icons";
+import { BagIcon, CloseIcon, MenuIcon, SearchIcon } from "@/components/icons";
+import { UserMenu } from "@/components/user-menu";
 import { mainNav, site } from "@/lib/site";
 
 export function SiteHeader() {
@@ -72,9 +73,7 @@ export function SiteHeader() {
             <Link href="/search" className="btn-icon" aria-label="Search">
               <SearchIcon />
             </Link>
-            <Link href="/account" className="btn-icon hidden sm:inline-grid" aria-label="Account">
-              <UserIcon />
-            </Link>
+            <UserMenu />
             <Link href="/cart" className="btn-icon relative -mr-2.5" aria-label="Cart, 0 items">
               <BagIcon />
               <span className="absolute top-1.5 right-1 grid size-4 place-items-center rounded-full bg-matcha text-[0.625rem] leading-none text-cream">
