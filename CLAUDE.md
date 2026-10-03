@@ -34,10 +34,14 @@ Next.js 16 (App Router, React 19) + TypeScript + Tailwind CSS v4, Better Auth, D
   - Schema changes use versioned migrations: `db:generate`, review the SQL, commit `drizzle/`, then `db:migrate`. Don't use `db:push`.
   - Homepage merchandising picks (bestsellers, spotlight, new arrival) are slug constants in `catalog.ts`, not DB columns.
   - The UI and URLs call categories "collections" (`/collections/*`); the database calls them `categories`.
-- **Site-wide copy and navigation** live in `src/lib/site.ts` (`site`, `mainNav`, `footerNav`). Many nav links point to routes that don't exist yet (`/journal`, `/help`, `/cart`, …). Only `/`, `/shop`, `/search`, `/new-arrivals`, `/collections/[slug]` and `/products/[slug]` are implemented.
+- **Site-wide copy and navigation** live in `src/lib/site.ts` (`site`, `mainNav`, `footerNav`). Many nav links point to routes that don't exist yet (`/journal`, `/help`, `/cart`, …). Only `/`, `/shop`, `/search`, `/new-arrivals`, `/collections/[slug]`, `/products/[slug]`, `/sign-in`, `/sign-up`, `/account` and `/admin` are implemented.
 - **Cart/checkout isn't wired up.** The product page purchase form renders UI states only.
 - **Database:** `src/db/index.ts` exports `db` as a lazy Proxy so importing it (e.g. through the auth route during `next build`) doesn't require `DATABASE_URL`. Keep that property: don't touch the DB at module top level. `src/db/schema.ts` is the single schema entry point used by drizzle-kit, the Drizzle client, and the Better Auth adapter. Generated auth tables must be re-exported from it.
 - **Auth:** `src/lib/auth.ts` (server, Drizzle adapter, `nextCookies()` must stay the last plugin), `src/lib/auth-client.ts` (React client), mounted at `src/app/api/auth/[...all]/route.ts`.
+  - Email/password plus Google (enabled only when `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` are set). Sign-in/up/out forms call `authClient` (`src/app/(auth)/auth-forms.tsx`) so requests go through `/api/auth/*`, where Better Auth's rate limiting and origin checks run. Server-side `auth.api.*` calls skip rate limiting, so don't use them for credential checks.
+  - Authorization is server-side via `src/lib/session.ts`: call `requireUser(path)` or `requireAdmin()` at the top of every protected page **and** every protected server action/route handler. Don't rely on layouts (they don't re-run on navigation). Non-admins get a 404 from `/admin`.
+  - `user.role` is `"customer"` by default and can't be set by clients (`input: false`). Promote admins with SQL: `update "user" set role = 'admin' where email = '…'`.
+  - Redirect targets from user input go through `safeNext()` (same-site paths only).
 - **Images** come from Unsplash via the `unsplash()` helper in `catalog.ts`. `next.config.ts` allowlists only `images.unsplash.com/photo-*` for `next/image`.
 
 ## Design system

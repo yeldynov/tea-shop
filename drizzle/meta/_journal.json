@@ -8,6 +8,13 @@
       "when": 1790757862696,
       "tag": "0000_loud_bromley",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791014740632,
+      "tag": "0001_sloppy_alex_power",
+      "breakpoints": true
     }
   ]
 }

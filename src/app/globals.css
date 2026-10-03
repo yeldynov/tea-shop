@@ -476,7 +476,7 @@
   color: var(--color-ink);
 }
 
-/* Selectable filter pill. Use aria-pressed / aria-selected for the active state. */
+/* Selectable filter pill. Use aria-pressed / aria-selected (or aria-current on links) for the active state. */
 @utility chip {
   display: inline-flex;
   align-items: center;
@@ -497,7 +497,8 @@
     border-color: var(--color-line-strong);
   }
   &[aria-pressed="true"],
-  &[aria-selected="true"] {
+  &[aria-selected="true"],
+  &[aria-current="page"] {
     background-color: var(--color-ink);
     border-color: var(--color-ink);
     color: var(--color-cream);
@@ -574,6 +575,16 @@
     outline: 2px solid var(--color-matcha);
     outline-offset: 1px;
     border-color: var(--color-matcha);
+  }
+  &[aria-invalid="true"] {
+    border-color: var(--color-danger);
+  }
+  &[aria-invalid="true"]:focus-visible {
+    outline-color: var(--color-danger);
+  }
+  &:read-only {
+    background-color: var(--color-mist);
+    color: var(--color-ink-soft);
   }
 }
 
