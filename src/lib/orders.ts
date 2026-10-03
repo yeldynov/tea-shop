@@ -36,6 +36,17 @@ export async function getOrdersForUser(userId: string) {
   });
 }
 
+/** Any customer's order. Admin pages only, after requireAdmin(). */
+export async function getOrder(orderId: string) {
+  return db.query.orders.findFirst({
+    where: eq(orders.id, orderId),
+    with: {
+      items: { with: { product: { columns: { slug: true, imageUrl: true } } } },
+      user: { columns: { email: true, name: true } },
+    },
+  });
+}
+
 export async function getPendingOrders(userId: string) {
   return db.query.orders.findMany({
     where: and(eq(orders.userId, userId), eq(orders.status, "pending")),

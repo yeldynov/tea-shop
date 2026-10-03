@@ -82,7 +82,7 @@ export type StockState = "in-stock" | "low-stock" | "sold-out";
 
 export const LOW_STOCK_THRESHOLD = 5;
 
-export function stockState(product: Product): StockState {
+export function stockState(product: Pick<Product, "stock">): StockState {
   if (product.stock <= 0) return "sold-out";
   if (product.stock <= LOW_STOCK_THRESHOLD) return "low-stock";
   return "in-stock";

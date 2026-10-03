@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { orderStatusBadge } from "@/components/order-summary";
 import { formatPrice } from "@/lib/catalog";
 import { getOrdersForUser, orderStatusLabels } from "@/lib/orders";
 import { requireUser } from "@/lib/session";
 
 export const metadata: Metadata = { title: "Orders", robots: { index: false } };
-
-const statusBadge = {
-  pending: "badge-yuzu",
-  paid: "badge-soft",
-  failed: "badge bg-sakura text-ink",
-  expired: "badge bg-mist text-ink-soft",
-} as const;
 
 const placedOn = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
 
@@ -54,7 +48,7 @@ export default async function OrdersPage() {
                     </span>
                   </div>
                   <div className="flex items-center gap-4 sm:gap-6">
-                    <span className={statusBadge[order.status]}>{orderStatusLabels[order.status]}</span>
+                    <span className={orderStatusBadge[order.status]}>{orderStatusLabels[order.status]}</span>
                     <span className="price text-ink">
                       {formatPrice(order.amountTotalCents ?? order.subtotalCents)}
                     </span>
