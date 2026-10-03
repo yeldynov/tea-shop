@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { BagIcon, CloseIcon, MenuIcon, SearchIcon } from "@/components/icons";
+import { CartMenu } from "@/components/cart-menu";
+import { CloseIcon, MenuIcon, SearchIcon } from "@/components/icons";
 import { UserMenu } from "@/components/user-menu";
 import { mainNav, site } from "@/lib/site";
 
@@ -74,12 +75,7 @@ export function SiteHeader() {
               <SearchIcon />
             </Link>
             <UserMenu />
-            <Link href="/cart" className="btn-icon relative -mr-2.5" aria-label="Cart, 0 items">
-              <BagIcon />
-              <span className="absolute top-1.5 right-1 grid size-4 place-items-center rounded-full bg-matcha text-[0.625rem] leading-none text-cream">
-                0
-              </span>
-            </Link>
+            <CartMenu />
           </div>
         </div>
       </header>

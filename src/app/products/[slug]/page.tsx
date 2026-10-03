@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { LeafIcon } from "@/components/icons";
+import { AddToBagForm } from "@/components/product/add-to-bag-form";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product/gallery";
 import { SectionHeading } from "@/components/section-heading";
@@ -128,10 +129,8 @@ function ProductSummary({ product }: { product: Product }) {
   );
 }
 
-// Cart isn't wired up yet: the form renders the right states but doesn't submit.
 function PurchaseForm({ product }: { product: Product }) {
   const soldOut = stockState(product) === "sold-out";
-  const maxQuantity = Math.min(product.stock, 10);
 
   return (
     <div className="flex flex-col gap-4 border-y py-6">
@@ -145,26 +144,7 @@ function PurchaseForm({ product }: { product: Product }) {
           </button>
         </div>
       ) : (
-        <form className="flex gap-3">
-          <label htmlFor="quantity" className="sr-only">
-            Quantity
-          </label>
-          <select
-            id="quantity"
-            name="quantity"
-            defaultValue={1}
-            className="input w-24! shrink-0 cursor-pointer rounded-pill! px-5!"
-          >
-            {Array.from({ length: maxQuantity }, (_, i) => i + 1).map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-          <button type="button" className="btn-primary btn-lg flex-1">
-            Add to bag · {formatPrice(product.priceCents)}
-          </button>
-        </form>
+        <AddToBagForm slug={product.slug} stock={product.stock} priceCents={product.priceCents} />
       )}
 
       <ul className="grid gap-2 text-sm text-ink-soft sm:grid-cols-2">
