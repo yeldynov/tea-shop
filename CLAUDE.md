@@ -6,11 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-- `npm run dev` / `npm run build` / `npm run start`
-- `npm run lint` — ESLint (flat config, `eslint-config-next`)
-- `npm run db:generate` + `npm run db:migrate` (migrations go to `drizzle/`); `npm run db:studio` to browse data
-- `npm run db:seed` — upserts the sample catalog from `src/db/seed-data.ts` (re-runnable; resets stock to the seed values)
-- `npm run auth:generate` — regenerates Better Auth tables into `src/db/auth-schema.ts`
+The package manager is pnpm (pinned via `packageManager` in `package.json`). Don't use npm or commit a `package-lock.json`. Use `pnpm add` / `pnpm add -D` for dependencies and `pnpm dlx` instead of `npx`. Dependency build scripts are blocked unless they're listed under `allowBuilds` in `pnpm-workspace.yaml`. If a new dependency needs one, run `pnpm approve-builds <pkg>`.
+
+- `pnpm install`
+- `pnpm dev` / `pnpm build` / `pnpm start`
+- `pnpm lint` — ESLint (flat config, `eslint-config-next`)
+- `pnpm db:generate` + `pnpm db:migrate` (migrations go to `drizzle/`); `pnpm db:studio` to browse data
+- `pnpm db:seed` — upserts the sample catalog from `src/db/seed-data.ts` (re-runnable; resets stock to the seed values)
+- `pnpm auth:generate` — regenerates Better Auth tables into `src/db/auth-schema.ts`
 
 There is no test runner configured.
 

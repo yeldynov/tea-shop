@@ -4,10 +4,10 @@ Next.js (App Router) + TypeScript + Tailwind CSS, with Better Auth, Drizzle ORM,
 
 ## Setup
 
-1. `npm install`
+1. `pnpm install`
 2. `cp .env.example .env.local` and fill in `DATABASE_URL` (Neon) and `BETTER_AUTH_SECRET` (`openssl rand -base64 32`).
-3. `npm run auth:generate` to generate the Better Auth tables into `src/db/auth-schema.ts`, re-export them from `src/db/schema.ts`, then `npm run db:push` (or `db:generate` + `db:migrate`).
-4. `npm run dev`
+3. `pnpm auth:generate` to generate the Better Auth tables into `src/db/auth-schema.ts`, re-export them from `src/db/schema.ts`, then `pnpm db:push` (or `db:generate` + `db:migrate`).
+4. `pnpm dev`
 
 ## Layout
 

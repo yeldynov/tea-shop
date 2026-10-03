@@ -1,4 +1,4 @@
-// The original sample catalog, loaded into the database by `npm run db:seed`.
+// The original sample catalog, loaded into the database by `pnpm db:seed`.
 import { unsplash, type Category, type Product } from "@/lib/catalog";
 
 export type SeedProduct = Omit<Product, "category"> & {
