@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { CartMenu } from "@/components/cart-menu";
-import { CloseIcon, MenuIcon, SearchIcon } from "@/components/icons";
+import { CloseIcon, LogoMark, MenuIcon, SearchIcon } from "@/components/icons";
 import { UserMenu } from "@/components/user-menu";
 import { mainNav, site } from "@/lib/site";
 
@@ -65,8 +65,9 @@ export function SiteHeader() {
 
           <Link
             href="/"
-            className="justify-self-center font-display text-[1.75rem] leading-none tracking-[-0.01em] text-ink lg:text-[2rem]"
+            className="inline-flex items-center gap-2.5 justify-self-center font-wordmark text-[1.375rem] leading-none tracking-[0.14em] text-ink lg:text-[1.625rem]"
           >
+            <LogoMark className="h-7 w-9 text-matcha lg:h-8 lg:w-10" />
             {site.name}
           </Link>
 

@@ -72,3 +72,13 @@ export function LeafIcon(props: IconProps) {
     </Icon>
   );
 }
+
+// Brand mark: a winding road climbing between two peaks. Keep in sync with app/icon.svg.
+export function LogoMark(props: IconProps) {
+  return (
+    <Icon viewBox="1.5 5.5 21 17" {...props}>
+      <path d="M2.5 14.5c2.5-3 4-7 6-7s3 3.5 3.5 4c.5-.5 2-3 4-3s3.5 3 5.5 6" />
+      <path d="M6.5 21.5c6-1 9-2.5 6.5-4.5s-2-3.5-1-5" />
+    </Icon>
+  );
+}
