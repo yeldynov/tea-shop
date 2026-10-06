@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { Disclosure } from "@/components/disclosure";
 import { LeafIcon } from "@/components/icons";
 import { AddToBagForm } from "@/components/product/add-to-bag-form";
 import { ProductCard } from "@/components/product-card";
@@ -191,27 +192,13 @@ function ProductFacts({ product }: { product: Product }) {
       <Disclosure title="Shipping & returns">
         <p>
           Orders ship within 2 working days in recyclable packaging. Unopened tea and unused
-          teaware can be returned within 30 days.
+          teaware can be returned within 30 days.{" "}
+          <Link href="/help/shipping" className="link">
+            Full policy
+          </Link>
         </p>
       </Disclosure>
     </div>
-  );
-}
-
-function Disclosure({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <details className="group border-t last:border-b">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-display text-xl text-ink [&::-webkit-details-marker]:hidden">
-        {title}
-        <span
-          aria-hidden
-          className="grid size-8 place-items-center rounded-full border text-xl leading-none font-light transition-transform duration-300 group-open:rotate-45"
-        >
-          +
-        </span>
-      </summary>
-      <div className="pb-5 text-ink-soft">{children}</div>
-    </details>
   );
 }
 
