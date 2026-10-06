@@ -3,7 +3,7 @@
 import { asc, count, desc, eq, getTableColumns } from "drizzle-orm";
 
 import { db } from "@/db";
-import { categories, orders, products } from "@/db/schema";
+import { categories, contacts, orders, products, user } from "@/db/schema";
 
 /** Every product with its collection name and stock, alphabetically. */
 export async function getAdminProducts() {
@@ -52,6 +52,16 @@ export async function getAllOrders() {
       user: { columns: { email: true, name: true } },
     },
   });
+}
+
+// ponytail: loads every contact; add pagination/search once the list gets long.
+/** Every known email, newest first, with the account name for registered users. */
+export async function getAllContacts() {
+  return db
+    .select({ ...getTableColumns(contacts), name: user.name })
+    .from(contacts)
+    .leftJoin(user, eq(user.id, contacts.userId))
+    .orderBy(desc(contacts.createdAt));
 }
 
 /** Parses a route `[id]` into a positive integer id, or undefined. */

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ArticleCard } from "@/components/article-card";
+import { NewsletterForm } from "@/components/home/newsletter-form";
 import { photos } from "@/lib/catalog";
 import { articles } from "@/lib/journal";
 
@@ -152,22 +153,7 @@ export function Newsletter() {
               notes and early access for subscribers.
             </p>
           </div>
-          {/* Subscription isn't wired up yet. */}
-          <form className="flex w-full flex-col gap-3 sm:flex-row lg:max-w-md">
-            <label htmlFor="newsletter-email" className="sr-only">
-              Email address
-            </label>
-            <input
-              id="newsletter-email"
-              type="email"
-              autoComplete="email"
-              placeholder="you@example.com"
-              className="input rounded-pill! px-5!"
-            />
-            <button type="button" className="btn-ink shrink-0">
-              Subscribe
-            </button>
-          </form>
+          <NewsletterForm />
         </div>
       </div>
     </section>

@@ -9,6 +9,7 @@ const items = [
   { label: "Collections", href: "/admin/collections" },
   { label: "Stock", href: "/admin/stock" },
   { label: "Orders", href: "/admin/orders" },
+  { label: "Contacts", href: "/admin/contacts" },
 ];
 
 export function AdminNav() {

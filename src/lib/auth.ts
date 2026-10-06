@@ -1,9 +1,12 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
+import { after } from "next/server";
 
 import { db } from "@/db";
 import * as schema from "@/db/schema";
+import { addRegisteredUser } from "@/lib/contacts";
+import { notifyOwner } from "@/lib/emailjs";
 
 const google = {
   clientId: process.env.GOOGLE_CLIENT_ID,
@@ -26,6 +29,22 @@ export const auth = betterAuth({
     additionalFields: {
       // input: false: sign-up can't set it. Promote admins in the database.
       role: { type: "string", required: false, defaultValue: "customer", input: false },
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        // Covers email/password and Google sign-ups. A failure here must not
+        // fail the sign-up: the account already exists.
+        after: async (user) => {
+          try {
+            await addRegisteredUser(user.id, user.email);
+          } catch (error) {
+            console.error("Saving contact failed", error);
+          }
+          after(() => notifyOwner("New registration", user.email, user.name));
+        },
+      },
     },
   },
   plugins: [nextCookies()], // keep nextCookies last
