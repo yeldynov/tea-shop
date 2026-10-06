@@ -1,8 +1,8 @@
 export const site = {
-  name: "Tea Shop",
+  name: "Old Road",
   tagline: "Traditional Chinese tea — pu’er, rock oolong and more, from small farms.",
   // Placeholder inbox: set the real address before launch.
-  email: "hello@teashop.example",
+  email: "hello@oldroad.example",
   announcement: ["Free shipping on orders over $60", "A tasting sample with every order"],
 };
 

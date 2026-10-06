@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Tea Shop design system
+ * Old Road design system
  * ----------------------
  * Serif display type + light grotesk UI on warm "rice paper" neutrals,
  * deep tea-ink text, matcha as the primary action colour and a few soft,
@@ -13,6 +13,7 @@
 @theme inline {
   --font-display: var(--font-cormorant), "Iowan Old Style", Georgia, "Songti SC", "Noto Serif SC", serif;
   --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+  --font-wordmark: var(--font-cormorant-sc), var(--font-cormorant), Georgia, serif;
 }
 
 @theme {

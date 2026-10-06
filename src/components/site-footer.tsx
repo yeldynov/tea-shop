@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { LogoMark } from "@/components/icons";
 import { footerNav, site } from "@/lib/site";
 
 export function SiteFooter() {
@@ -7,7 +8,11 @@ export function SiteFooter() {
     <footer className="mt-auto bg-ink text-cream/80">
       <div className="container-page section-sm grid gap-12 lg:grid-cols-[1.4fr_2fr]">
         <div className="flex max-w-sm flex-col gap-4">
-          <Link href="/" className="font-display text-4xl leading-none text-cream">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-3 font-wordmark text-3xl leading-none tracking-[0.14em] text-cream uppercase"
+          >
+            <LogoMark className="h-8 w-10 text-matcha-pale" />
             {site.name}
           </Link>
           <p className="text-sm leading-relaxed">
