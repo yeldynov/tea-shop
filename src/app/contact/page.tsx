@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { HelpNav } from "@/components/help-nav";
-import { site } from "@/lib/site";
+
+import { ContactForm } from "./contact-form";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -21,38 +23,33 @@ export default function ContactPage() {
       <HelpNav current="/contact" />
 
       <div className="split items-start">
-        <header className="flex flex-col gap-4">
-          <p className="eyebrow">
-            Contact <span lang="zh-Hans" className="text-ink-faint not-italic">· 联系我们</span>
-          </p>
-          <h1>Write to us</h1>
-          <p className="lead max-w-xl">
-            A question about an order, a tea that isn’t brewing the way you hoped, or just something
-            you’re curious about: we read every message and answer within one working day.
-          </p>
-        </header>
+        <div className="flex flex-col gap-10">
+          <header className="flex flex-col gap-4">
+            <p className="eyebrow">
+              Contact <span lang="zh-Hans" className="text-ink-faint not-italic">· 联系我们</span>
+            </p>
+            <h1>Write to us</h1>
+            <p className="lead max-w-xl">
+              A question about an order, a tea that isn’t brewing the way you hoped, or just something
+              you’re curious about: we read every message and answer within one working day.
+            </p>
+          </header>
+          <ContactForm />
+        </div>
 
-        <div className="panel flex flex-col gap-6 bg-matcha-pale">
-          <div className="flex flex-col gap-2">
-            <p className="label text-matcha-deep">Email</p>
-            <a
-              href={`mailto:${site.email}`}
-              className="font-display text-display-md break-all text-ink link-quiet"
-            >
-              {site.email}
-            </a>
-          </div>
-          <div className="flex flex-col gap-2">
-            <p className="label text-matcha-deep">Hours</p>
-            <p className="text-ink">Monday to Friday, 9 am – 5 pm Eastern</p>
-          </div>
-          <p className="text-sm">
-            Writing about an order? Include the order number from your confirmation email so we can
-            find it quickly.
-          </p>
-          <a href={`mailto:${site.email}`} className="btn-primary self-start">
-            Send an email
-          </a>
+        <div className="media hidden lg:block">
+          <Image src="/motion/gaiwan-pour-poster.jpg" alt="" fill sizes="50vw" className="object-cover" />
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-hidden
+            className="absolute inset-0 object-cover motion-reduce:hidden"
+          >
+            <source src="/motion/gaiwan-pour.webm" type="video/webm" />
+            <source src="/motion/gaiwan-pour.mp4" type="video/mp4" />
+          </video>
         </div>
       </div>
 
