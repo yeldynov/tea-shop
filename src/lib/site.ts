@@ -1,6 +1,8 @@
 export const site = {
   name: "Tea Shop",
   tagline: "Traditional Chinese tea — pu’er, rock oolong and more, from small farms.",
+  // Placeholder inbox: set the real address before launch.
+  email: "hello@teashop.example",
   announcement: ["Free shipping on orders over $60", "A tasting sample with every order"],
 };
 
@@ -22,7 +24,6 @@ export const footerNav = [
       { label: "Oolong", href: "/collections/oolong" },
       { label: "Black tea", href: "/collections/black-tea" },
       { label: "Teaware", href: "/collections/teaware" },
-      { label: "Gift cards", href: "/gift-cards" },
     ],
   },
   {

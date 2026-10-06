@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { articles, photos } from "@/lib/catalog";
+import { ArticleCard } from "@/components/article-card";
+import { photos } from "@/lib/catalog";
+import { articles } from "@/lib/journal";
 
-const promises = [
+export const promises = [
   { figure: "18", label: "small farms in Yunnan and Fujian we buy from directly" },
   { figure: "15 yrs", label: "the oldest pu’er resting in our cellar" },
   { figure: "100%", label: "of teas tasted gongfu-style before they’re listed" },
@@ -127,28 +129,9 @@ export function Journal() {
       </div>
 
       <ul className="grid-cards">
-        {articles.map((article) => (
+        {articles.slice(0, 3).map((article) => (
           <li key={article.slug}>
-            <article className="group relative flex flex-col gap-4">
-              <div className="relative aspect-4/3 overflow-hidden rounded-lg bg-mist">
-                <Image
-                  src={article.image.src}
-                  alt={article.image.alt}
-                  fill
-                  sizes="(min-width: 64rem) 30vw, (min-width: 40rem) 45vw, 100vw"
-                  className="object-cover transition-transform duration-700 ease-out-soft group-hover:scale-104"
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="badge-soft">{article.kicker}</span>
-                <span className="text-sm text-ink-faint">{article.readTime}</span>
-              </div>
-              <h3 className="text-display-sm">
-                <Link href={`/journal/${article.slug}`} className="after:absolute after:inset-0">
-                  {article.title}
-                </Link>
-              </h3>
-            </article>
+            <ArticleCard article={article} />
           </li>
         ))}
       </ul>

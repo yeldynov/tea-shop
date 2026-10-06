@@ -1,5 +1,5 @@
 // Catalog types and helpers. Products and categories live in the database
-// (see `catalog-queries.ts`); editorial content below is still static.
+// (see `catalog-queries.ts`); photos below are static.
 
 export type Photo = {
   src: string;
@@ -37,14 +37,6 @@ export type Product = {
   image: Photo;
   /** Extra imagery after the main image on the product page. */
   gallery?: Photo[];
-};
-
-export type Article = {
-  slug: string;
-  title: string;
-  kicker: string;
-  readTime: string;
-  image: Photo;
 };
 
 export function unsplash(id: string, alt: string): Photo {
@@ -94,39 +86,6 @@ export const merchandising = {
   spotlight: "da-hong-pao",
   newArrival: "menghai-sheng-cake-2015",
 };
-
-export const articles: Article[] = [
-  {
-    slug: "sheng-or-shou",
-    title: "Sheng or shou? A first guide to pu’er",
-    kicker: "Pu’er primer",
-    readTime: "7 min read",
-    image: unsplash(
-      "1683714548668-e03fedfa5a89",
-      "A pu'er tea cake in a printed wrapper beside a clay teapot",
-    ),
-  },
-  {
-    slug: "seasoning-yixing",
-    title: "Seasoning your first Yixing teapot",
-    kicker: "Teaware",
-    readTime: "5 min read",
-    image: unsplash(
-      "1685819039497-199e732ba7f3",
-      "Clay teapots and cups on a tea table as tea is poured",
-    ),
-  },
-  {
-    slug: "spring-on-the-mountain",
-    title: "Spring picking on the tea mountain",
-    kicker: "From the farms",
-    readTime: "4 min read",
-    image: unsplash(
-      "1743401497688-5c3ab9b7447a",
-      "A flowering tree among terraced tea bushes",
-    ),
-  },
-];
 
 const priceFormat = new Intl.NumberFormat("en-US", {
   style: "currency",
