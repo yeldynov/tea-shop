@@ -243,6 +243,10 @@
   & :where(h2, h3, h4) {
     margin-top: 2em;
   }
+  & :where(h2) {
+    font-size: var(--text-display-md);
+    line-height: var(--text-display-md--line-height);
+  }
   & :where(h2, h3, h4) + * {
     margin-top: 0.75em;
   }
