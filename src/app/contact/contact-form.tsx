@@ -3,14 +3,7 @@
 import { useState, useTransition } from "react";
 
 import { FormField, FormMessage, TextareaField } from "@/components/form-field";
-
-// EmailJS sends straight from the browser; these IDs are public by design.
-// The template lives in `emailjs/contact-template.html`; its ID is set in the EmailJS dashboard.
-const EMAILJS = {
-  service_id: "service_lm67rww",
-  template_id: "template_contact",
-  user_id: "Zeg9Tek5_qLL-CFwn",
-};
+import { sendEmailJs } from "@/lib/emailjs";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const topics = ["An order", "A tea or brewing", "Teaware", "Something else"];
@@ -53,12 +46,13 @@ export function ContactForm() {
 
     startTransition(async () => {
       try {
-        const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...EMAILJS, template_params: { ...values, order: values.order || "—" } }),
+        await sendEmailJs({
+          name: values.name,
+          email: values.email,
+          topic: values.topic,
+          order: values.order || "—",
+          message: values.message,
         });
-        if (!res.ok) throw new Error(await res.text());
       } catch {
         setErrors({ form: "We couldn’t send your message. Please try again, or email us directly." });
         return;

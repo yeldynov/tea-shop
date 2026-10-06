@@ -146,6 +146,18 @@ export const orderItems = pgTable(
   ],
 );
 
+/**
+ * Every email we know: registered users (`userId` set) and newsletter
+ * subscribers (`subscribedAt` set); a row can be both. Emails are lowercased.
+ */
+export const contacts = pgTable("contacts", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  email: text("email").notNull().unique(),
+  userId: text("user_id").references(() => user.id, { onDelete: "set null" }),
+  subscribedAt: timestamp("subscribed_at", { withTimezone: true }),
+  ...timestamps,
+});
+
 export const categoriesRelations = relations(categories, ({ many }) => ({
   products: many(products),
 }));

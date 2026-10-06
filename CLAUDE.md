@@ -17,7 +17,7 @@ The package manager is pnpm (pinned via `packageManager` in `package.json`). Don
 
 There is no test runner configured.
 
-Env: copy `.env.example` to `.env.local` and set `DATABASE_URL` (Neon pooled connection string), `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`. For local webhooks run `stripe listen --forward-to localhost:3000/api/stripe/webhook`. `drizzle.config.ts` reads `.env.local` then `.env`.
+Env: copy `.env.example` to `.env.local` and set `DATABASE_URL` (Neon pooled connection string), `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` and the `NEXT_PUBLIC_EMAILJS_*` IDs (`EMAILJS_PRIVATE_KEY` optional). For local webhooks run `stripe listen --forward-to localhost:3000/api/stripe/webhook`. `drizzle.config.ts` reads `.env.local` then `.env`.
 
 ## Stack
 
@@ -43,10 +43,11 @@ Next.js 16 (App Router, React 19) + TypeScript + Tailwind CSS v4, Better Auth, D
   - `checkout.session.expired`, `checkout.session.async_payment_failed` and `/checkout/cancel` call `releaseOrder`, which returns the stock.
   - Every status change is a single `… where status = 'pending'` statement, so duplicate webhooks are harmless. Keep it that way.
   - Link to `/checkout/cancel` with `<a>`, not `<Link>`: a prefetch would cancel the order.
-- **Admin** (`src/app/admin/`): products, collections, stock and read-only orders. All writes are server actions in `src/app/admin/actions.ts`, each starting with `await requireAdmin()`. Input is parsed by `src/lib/admin-forms.ts` (`pnpm tsx src/lib/admin-forms.check.ts`), and reads go through `src/lib/admin-queries.ts`.
+- **Admin** (`src/app/admin/`): products, collections, stock, read-only orders and read-only contacts. All writes are server actions in `src/app/admin/actions.ts`, each starting with `await requireAdmin()`. Input is parsed by `src/lib/admin-forms.ts` (`pnpm tsx src/lib/admin-forms.check.ts`), and reads go through `src/lib/admin-queries.ts`.
   - Product and collection slugs are fixed after creation (cart cookies and URLs use them). Products aren't deleted, and order status is never edited by hand.
   - `updateStock` only writes if the quantity still equals what the page showed, so it can't undo a concurrent checkout reservation. Keep stock writes conditional.
   - Client forms submit through `useAdminForm` (onSubmit, not `<form action>`) so a failed validation doesn't reset the inputs.
+- **Contacts & newsletter:** `contacts` holds every known email (lowercased): registered users (`user_id`, written by Better Auth's `databaseHooks.user.create.after` in `src/lib/auth.ts`) and homepage newsletter subscribers (`subscribed_at`, via `subscribe` in `src/app/newsletter/actions.ts`). Writes go through `src/lib/contacts.ts`. New registrations/subscriptions notify the shop through EmailJS (`notifyOwner` in `src/lib/emailjs.ts`, same `template_contact` as the `/contact` form), sent in `after()` and never failing the request.
 - **Database:** `src/db/index.ts` exports `db` as a lazy Proxy so importing it (e.g. through the auth route during `next build`) doesn't require `DATABASE_URL`. Keep that property: don't touch the DB at module top level. `src/db/schema.ts` is the single schema entry point used by drizzle-kit, the Drizzle client, and the Better Auth adapter. Generated auth tables must be re-exported from it.
 - **Auth:** `src/lib/auth.ts` (server, Drizzle adapter, `nextCookies()` must stay the last plugin), `src/lib/auth-client.ts` (React client), mounted at `src/app/api/auth/[...all]/route.ts`.
   - Email/password plus Google (enabled only when `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` are set). Sign-in/up/out forms call `authClient` (`src/app/(auth)/auth-forms.tsx`) so requests go through `/api/auth/*`, where Better Auth's rate limiting and origin checks run. Server-side `auth.api.*` calls skip rate limiting, so don't use them for credential checks.
