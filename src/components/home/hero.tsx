@@ -12,7 +12,7 @@ export async function Hero() {
       <div className='relative isolate flex min-h-[max(34rem,min(calc(100svh-9rem),54rem))] items-end overflow-hidden rounded-card md:rounded-panel'>
         {/* Poster stays underneath: shown while the video loads and for reduced-motion users. */}
         <Image
-          src='/hero/tea-mountains-autumn-poster.jpg'
+          src='/hero/tea-table-poster.jpg'
           alt=''
           fill
           preload
@@ -28,8 +28,8 @@ export async function Hero() {
           aria-hidden
           className='absolute inset-0 -z-20 size-full object-cover motion-reduce:hidden'
         >
-          <source src='/hero/tea-mountains-autumn.webm' type='video/webm' />
-          <source src='/hero/tea-mountains-autumn.mp4' type='video/mp4' />
+          <source src='/hero/tea-table.webm' type='video/webm' />
+          <source src='/hero/tea-table.mp4' type='video/mp4' />
         </video>
         <div className='absolute inset-0 -z-10 bg-linear-to-t from-ink/85 via-ink/35 to-ink/10' />
         <div className='absolute inset-0 -z-10 bg-linear-to-r from-ink/45 to-transparent to-70%' />
