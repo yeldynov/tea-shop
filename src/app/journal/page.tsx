@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 import { ArticleCard } from "@/components/article-card";
-import { photos } from "@/lib/catalog";
+import { MotionVideo } from "@/components/motion-video";
 import { articles } from "@/lib/journal";
 
 export const metadata: Metadata = {
@@ -42,13 +41,11 @@ export default function JournalPage() {
       {/* The brewing guide is a standing page, so it leads rather than sitting in the dated list. */}
       <article className="group relative mb-section-sm grid overflow-hidden rounded-card bg-matcha-pale lg:grid-cols-2">
         <div className="relative aspect-4/3 lg:aspect-auto lg:min-h-96">
-          <Image
-            src={photos.gongfuPour.src}
-            alt={photos.gongfuPour.alt}
-            fill
+          <MotionVideo
+            src="/motion/gaiwan-pour-wide"
             preload
             sizes="(min-width: 64rem) 40vw, 100vw"
-            className="object-cover transition-transform duration-700 ease-out-soft group-hover:scale-104"
+            className="transition-transform duration-700 ease-out-soft group-hover:scale-104"
           />
         </div>
         <div className="flex flex-col justify-center gap-4 p-6 sm:p-10 lg:p-14">

@@ -6,6 +6,7 @@ import { clearCart, removeFromCart } from "@/app/cart/actions";
 import { CartLineQuantity } from "@/app/cart/cart-line-quantity";
 import { startCheckout } from "@/app/checkout/actions";
 import { FormMessage } from "@/components/form-field";
+import { MotionVideo } from "@/components/motion-video";
 import { getCart, type CartLine } from "@/lib/cart-queries";
 import { formatPrice } from "@/lib/catalog";
 import { getPendingOrders } from "@/lib/orders";
@@ -55,6 +56,9 @@ export default async function CartPage({ searchParams }: PageProps<"/cart">) {
 
       {lines.length === 0 ? (
         <div className="flex flex-col items-start gap-5">
+          <div className="relative aspect-video w-full max-w-2xl overflow-hidden rounded-card bg-mist">
+            <MotionVideo src="/motion/tea-room-rain" sizes="(min-width: 42rem) 42rem, 100vw" />
+          </div>
           <p className="lead">Your bag is empty.</p>
           <Link href="/shop" className="btn-primary">
             Browse the shop

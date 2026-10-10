@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { Disclosure } from "@/components/disclosure";
 import { HelpNav } from "@/components/help-nav";
+import { MotionVideo } from "@/components/motion-video";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -174,6 +175,9 @@ export default function HelpPage() {
             </Link>
             .
           </p>
+          <div className="relative mt-4 hidden aspect-video overflow-hidden rounded-card bg-mist lg:block">
+            <MotionVideo src="/motion/steam-calligraphy" sizes="40vw" />
+          </div>
         </header>
 
         <div className="flex flex-col gap-12">

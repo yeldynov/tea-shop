@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { MotionVideo } from "@/components/motion-video";
 import { OrderSummary } from "@/components/order-summary";
 import { getOrderForUser, orderStatusLabels } from "@/lib/orders";
 import { requireUser } from "@/lib/session";
@@ -27,6 +28,11 @@ export default async function OrderPage({ params }: PageProps<"/account/orders/[
   return (
     <>
       <header className="flex flex-col gap-3">
+        {(order.status === "pending" || order.status === "paid") && (
+          <div className="relative mb-2 size-32 overflow-hidden rounded-card bg-mist">
+            <MotionVideo src="/motion/order-steeping" sizes="128px" />
+          </div>
+        )}
         <p className="eyebrow">Order · {placedOn.format(order.createdAt)}</p>
         <h1>{orderStatusLabels[order.status]}</h1>
         <p className="lead">{statusText[order.status]}</p>

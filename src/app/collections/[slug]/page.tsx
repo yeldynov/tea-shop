@@ -4,12 +4,19 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CollectionTile } from "@/components/home/featured-collections";
+import { MotionVideo } from "@/components/motion-video";
 import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
 import { getCategories, getCategory, getProductsByCategory } from "@/lib/catalog-queries";
 
 // Rendered per request so stock is always current; unknown slugs 404 below.
 export const dynamic = "force-dynamic";
+
+// Collections with a motion loop in place of the header photo.
+const motion: Record<string, string> = {
+  puer: "/motion/puer-cake",
+  "green-tea": "/motion/leaf-unfurl",
+};
 
 export async function generateMetadata({
   params,
@@ -70,14 +77,18 @@ export default async function CollectionPage({ params }: PageProps<"/collections
           </p>
         </div>
         <div className="relative aspect-4/3 overflow-hidden rounded-card bg-mist">
-          <Image
-            src={collection.image.src}
-            alt={collection.image.alt}
-            fill
-            preload
-            sizes="(min-width: 64rem) 40vw, 100vw"
-            className="object-cover"
-          />
+          {motion[slug] ? (
+            <MotionVideo src={motion[slug]} preload sizes="(min-width: 64rem) 40vw, 100vw" />
+          ) : (
+            <Image
+              src={collection.image.src}
+              alt={collection.image.alt}
+              fill
+              preload
+              sizes="(min-width: 64rem) 40vw, 100vw"
+              className="object-cover"
+            />
+          )}
         </div>
       </header>
 

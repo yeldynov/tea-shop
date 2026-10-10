@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Disclosure } from "@/components/disclosure";
+import { MotionVideo } from "@/components/motion-video";
 import { photos } from "@/lib/catalog";
 
 export const metadata: Metadata = {
@@ -126,13 +127,7 @@ export default function BrewingGuidePage() {
             </p>
           </div>
           <div className="media aspect-4/3 rounded-card">
-            <Image
-              src={photos.gaiwanLid.src}
-              alt={photos.gaiwanLid.alt}
-              fill
-              preload
-              sizes="(min-width: 64rem) 40vw, 100vw"
-            />
+            <MotionVideo src="/hero/tea-table" preload sizes="(min-width: 64rem) 40vw, 100vw" />
           </div>
         </header>
       </div>

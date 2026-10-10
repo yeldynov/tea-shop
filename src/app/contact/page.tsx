@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 import { HelpNav } from "@/components/help-nav";
+import { MotionVideo } from "@/components/motion-video";
 
 import { ContactForm } from "./contact-form";
 
@@ -38,18 +38,7 @@ export default function ContactPage() {
         </div>
 
         <div className="media hidden lg:block">
-          <Image src="/motion/gaiwan-pour-poster.jpg" alt="" fill sizes="50vw" className="object-cover" />
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            aria-hidden
-            className="absolute inset-0 object-cover motion-reduce:hidden"
-          >
-            <source src="/motion/gaiwan-pour.webm" type="video/webm" />
-            <source src="/motion/gaiwan-pour.mp4" type="video/mp4" />
-          </video>
+          <MotionVideo src="/motion/gaiwan-pour" sizes="50vw" />
         </div>
       </div>
 

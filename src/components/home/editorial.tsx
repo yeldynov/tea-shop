@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { ArticleCard } from "@/components/article-card";
 import { NewsletterForm } from "@/components/home/newsletter-form";
+import { MotionVideo } from "@/components/motion-video";
 import { photos } from "@/lib/catalog";
 import { articles } from "@/lib/journal";
 
@@ -17,13 +18,7 @@ export function GardenStory() {
     <section className="section">
       <div className="container-wide">
         <div className="relative isolate flex min-h-[32rem] items-center justify-center overflow-hidden rounded-card px-6 py-20 text-center md:min-h-[40rem] md:rounded-panel">
-          <Image
-            src={photos.teaPickers.src}
-            alt={photos.teaPickers.alt}
-            fill
-            sizes="100vw"
-            className="-z-20 object-cover"
-          />
+          <MotionVideo src="/motion/tea-house" sizes="100vw" className="-z-20" />
           <div className="absolute inset-0 -z-10 bg-ink/45" />
           <div className="flex max-w-3xl flex-col items-center gap-6 text-cream">
             <p className="eyebrow text-cream/80">From the tea mountains</p>

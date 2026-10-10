@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { promises } from "@/components/home/editorial";
+import { MotionVideo } from "@/components/motion-video";
 import { photos, unsplash } from "@/lib/catalog";
 
 export const metadata: Metadata = {
@@ -83,14 +84,7 @@ export default function SourcingPage() {
 
       <section className="container-wide">
         <div className="relative isolate flex min-h-[28rem] items-end overflow-hidden rounded-card px-6 py-12 md:min-h-[36rem] md:rounded-panel md:px-14 md:py-16">
-          <Image
-            src={photos.teaPickers.src}
-            alt={photos.teaPickers.alt}
-            fill
-            preload
-            sizes="100vw"
-            className="-z-20 object-cover"
-          />
+          <MotionVideo src="/motion/first-light" preload sizes="100vw" className="-z-20" />
           <div className="absolute inset-0 -z-10 bg-linear-to-t from-ink/70 via-ink/25 to-transparent" />
           <div className="flex max-w-3xl flex-col gap-4 text-cream">
             <p className="eyebrow text-cream/80">

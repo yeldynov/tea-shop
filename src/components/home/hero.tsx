@@ -1,8 +1,18 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { MotionVideo } from '@/components/motion-video'
 import { merchandising } from '@/lib/catalog'
 import { getProduct } from '@/lib/catalog-queries'
+
+// Northern-hemisphere seasons, like the tea year on /about/sourcing.
+function season() {
+  const month = new Date().getMonth()
+  if (month >= 2 && month <= 4) return 'spring'
+  if (month >= 5 && month <= 7) return 'summer'
+  if (month >= 8 && month <= 10) return 'autumn'
+  return 'winter'
+}
 
 export async function Hero() {
   const featured = await getProduct(merchandising.newArrival)
@@ -10,27 +20,13 @@ export async function Hero() {
   return (
     <section className='container-wide pt-3 md:pt-4'>
       <div className='relative isolate flex min-h-[max(34rem,min(calc(100svh-9rem),54rem))] items-end overflow-hidden rounded-card md:rounded-panel'>
-        {/* Poster stays underneath: shown while the video loads and for reduced-motion users. */}
-        <Image
-          src='/hero/tea-table-poster.jpg'
-          alt=''
-          fill
+        {/* 15s seamless loop of the tea mountains, matched to the current season. */}
+        <MotionVideo
+          src={`/hero/tea-mountains-${season()}`}
           preload
           sizes='100vw'
-          className='-z-20 object-cover'
+          className='-z-20'
         />
-        {/* 15s seamless loop, rendered from scratch in the design-system palette. */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          aria-hidden
-          className='absolute inset-0 -z-20 size-full object-cover motion-reduce:hidden'
-        >
-          <source src='/hero/tea-table.webm' type='video/webm' />
-          <source src='/hero/tea-table.mp4' type='video/mp4' />
-        </video>
         <div className='absolute inset-0 -z-10 bg-linear-to-t from-ink/85 via-ink/35 to-ink/10' />
         <div className='absolute inset-0 -z-10 bg-linear-to-r from-ink/45 to-transparent to-70%' />
 
