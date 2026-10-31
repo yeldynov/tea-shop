@@ -1,3 +1,5 @@
+import { site } from "@/lib/site";
+
 // EmailJS, called over its REST API. The IDs are NEXT_PUBLIC_ because the
 // contact form sends from the browser; the template lives in
 // `emailjs/contact-template.html`. Next inlines these at build time, so they
@@ -19,7 +21,7 @@ export async function sendEmailJs(params: TemplateParams, accessToken?: string) 
   const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...EMAILJS, accessToken, template_params: params }),
+    body: JSON.stringify({ ...EMAILJS, accessToken, template_params: { site: site.name, ...params } }),
   });
   if (!res.ok) throw new Error(`EmailJS ${res.status}: ${await res.text()}`);
 }
