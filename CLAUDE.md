@@ -14,8 +14,7 @@ The package manager is pnpm (pinned via `packageManager` in `package.json`). Don
 - `pnpm db:generate` + `pnpm db:migrate` (migrations go to `drizzle/`); `pnpm db:studio` to browse data
 - `pnpm db:seed` — upserts the sample catalog from `src/db/seed-data.ts` (re-runnable; resets stock to the seed values)
 - `pnpm auth:generate` — regenerates Better Auth tables into `src/db/auth-schema.ts`
-
-There is no test runner configured.
+- `pnpm test` — Vitest in watch mode; `pnpm test:run` runs once (tests are `*.test.ts` next to the code)
 
 Env: copy `.env.example` to `.env.local` and set `DATABASE_URL` (Neon pooled connection string), `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` and the `NEXT_PUBLIC_EMAILJS_*` IDs (`EMAILJS_PRIVATE_KEY` optional). For local webhooks run `stripe listen --forward-to localhost:3000/api/stripe/webhook`. `drizzle.config.ts` reads `.env.local` then `.env`.
 
@@ -36,7 +35,7 @@ Next.js 16 (App Router, React 19) + TypeScript + Tailwind CSS v4, Better Auth, D
   - The UI and URLs call categories "collections" (`/collections/*`); the database calls them `categories`.
 - **Site-wide copy and navigation** live in `src/lib/site.ts` (`site`, `mainNav`, `footerNav`). Every nav link points to an implemented route; keep it that way. Implemented: `/`, `/shop`, `/search`, `/new-arrivals`, `/cart`, `/checkout/*`, `/account/orders`, `/account/orders/[id]`, `/collections/[slug]`, `/products/[slug]`, `/sign-in`, `/sign-up`, `/account`, `/journal`, `/journal/brewing`, `/journal/[slug]`, `/about/sourcing`, `/help`, `/help/shipping`, `/contact` and `/admin/*`. The contact email is `site.email` (a placeholder until launch).
 - **Journal** articles are static JSX in `src/lib/journal.tsx` (not the DB). `/journal/brewing` is its own page and takes precedence over `[slug]`, so don't give an article that slug.
-- **Cart** is an httpOnly `cart` cookie holding only `{ slug: quantity }` (`src/lib/cart.ts`), so guests can use it and there's no cart table. Prices and stock are never stored there. `getCart()` (`src/lib/cart-queries.ts`) joins it to the catalog on every render and clamps quantities to `min(stock, 10)`. Only the server actions in `src/app/cart/actions.ts` write the cookie, and they re-check stock on every call. Adding to the bag doesn't reserve stock; checkout does. `pnpm tsx src/lib/cart.check.ts` asserts the cart rules.
+- **Cart** is an httpOnly `cart` cookie holding only `{ slug: quantity }` (`src/lib/cart.ts`), so guests can use it and there's no cart table. Prices and stock are never stored there. `getCart()` (`src/lib/cart-queries.ts`) joins it to the catalog on every render and clamps quantities to `min(stock, 10)`. Only the server actions in `src/app/cart/actions.ts` write the cookie, and they re-check stock on every call. Adding to the bag doesn't reserve stock; checkout does. `src/lib/cart.test.ts` covers the cart rules (`pnpm test`).
 - **Checkout** (Stripe Checkout, hosted): `startCheckout` (`src/app/checkout/actions.ts`) takes no input. It builds the order and the Stripe line items (`price_data`) from `getCart()`, never from the client.
   - The order (`orders` + `order_items`, which keep a snapshot of name and price) is created `pending` together with the stock reservation, in one `db.batch()`. `product_stock`'s non-negative CHECK makes the reservation all-or-nothing.
   - Only Stripe marks an order `paid`: `syncOrderFromCheckoutSession` (`src/lib/orders.ts`) reads the session from the Stripe API. It's called by the webhook (`src/app/api/stripe/webhook/route.ts`) and by `/checkout/success`.

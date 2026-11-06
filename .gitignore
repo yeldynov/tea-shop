@@ -43,3 +43,6 @@ next-env.d.ts
 
 # local test accounts (never commit)
 test-credentials.txt
+
+# Claude Code local settings
+.claude/settings.local.json

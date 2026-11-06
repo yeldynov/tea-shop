@@ -83,10 +83,10 @@ stripe listen --forward-to localhost:3000/api/stripe/webhook
 
 To make a user an admin, run this SQL: `update "user" set role = 'admin' where email = 'you@example.com';`
 
-Self-checks for the cart and admin form rules:
+Tests for the cart rules (Vitest) and the self-check for admin form rules:
 
 ```bash
-pnpm tsx src/lib/cart.check.ts
+pnpm test:run
 pnpm tsx src/lib/admin-forms.check.ts
 ```
 
