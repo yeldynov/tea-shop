@@ -7,7 +7,8 @@ import { articles } from "@/lib/journal";
 
 export const metadata: Metadata = {
   title: "Journal",
-  description: "Brewing guides, notes from the farms we buy from, and a primer or two on pu’er and oolong.",
+  description:
+    "Brewing guides, notes from the farms we buy from, and a primer or two on pu’er and oolong.",
 };
 
 export default function JournalPage() {
@@ -29,7 +30,10 @@ export default function JournalPage() {
 
       <header className="mb-10 flex flex-col gap-4 md:mb-14">
         <p className="eyebrow">
-          Notes from the tea table <span lang="zh-Hans" className="text-ink-faint not-italic">· 茶记</span>
+          Notes from the tea table{" "}
+          <span lang="zh-Hans" className="text-ink-faint not-italic">
+            · 茶记
+          </span>
         </p>
         <h1>The Journal</h1>
         <p className="lead max-w-2xl">
@@ -56,8 +60,8 @@ export default function JournalPage() {
             </Link>
           </h2>
           <p>
-            The vessels, the water, the timings: everything you need to brew pu’er, oolong and
-            black tea the way it’s brewed where it’s grown.
+            The vessels, the water, the timings: everything you need to brew pu’er, oolong and black
+            tea the way it’s brewed where it’s grown.
           </p>
           <span className="link-arrow mt-2">
             Read the guide <span aria-hidden>→</span>

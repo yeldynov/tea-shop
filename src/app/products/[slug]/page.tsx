@@ -174,9 +174,9 @@ function ProductFacts({ product }: { product: Product }) {
         <Disclosure title="How to brew">
           <p>
             Use {product.brew.leaf} of leaf in a 100 ml gaiwan or clay pot with water at{" "}
-            {product.brew.water}. Rinse once and pour it off, then steep for{" "}
-            {product.brew.time}, adding a few seconds each round. Expect {product.brew.infusions}{" "}
-            infusions. For a mug, use a third of the leaf and steep 3–4 minutes.
+            {product.brew.water}. Rinse once and pour it off, then steep for {product.brew.time},
+            adding a few seconds each round. Expect {product.brew.infusions} infusions. For a mug,
+            use a third of the leaf and steep 3–4 minutes.
           </p>
         </Disclosure>
       )}
@@ -191,8 +191,8 @@ function ProductFacts({ product }: { product: Product }) {
       </Disclosure>
       <Disclosure title="Shipping & returns">
         <p>
-          Orders ship within 2 working days in recyclable packaging. Unopened tea and unused
-          teaware can be returned within 30 days.{" "}
+          Orders ship within 2 working days in recyclable packaging. Unopened tea and unused teaware
+          can be returned within 30 days.{" "}
           <Link href="/help/shipping" className="link">
             Full policy
           </Link>

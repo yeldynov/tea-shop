@@ -33,7 +33,10 @@ export default async function NewArrivalsPage() {
 
       <header className="mb-10 flex flex-col gap-4 md:mb-14">
         <p className="eyebrow">
-          Just landed <span lang="zh-Hans" className="text-ink-faint not-italic">· 新到</span>
+          Just landed{" "}
+          <span lang="zh-Hans" className="text-ink-faint not-italic">
+            · 新到
+          </span>
         </p>
         <h1>New arrivals</h1>
         <p className="lead max-w-2xl">

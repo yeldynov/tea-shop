@@ -54,11 +54,11 @@ export const articles: Article[] = [
 
         <h2>Sheng: raw, and slow</h2>
         <p>
-          <span lang="zh-Hans">生茶</span> sheng is maocha pressed into a cake and left alone. Young,
-          it’s bright and bitter-sweet, closer to a green tea with a backbone: apricot, cut grass,
-          a long sweet aftertaste the Chinese call <em>huigan</em>. Over years in a humid room it
-          slowly darkens, the bitterness turns to depth, and notes of dried fruit, camphor and old
-          wood appear. That transformation is why people buy sheng in cakes and wait.
+          <span lang="zh-Hans">生茶</span> sheng is maocha pressed into a cake and left alone.
+          Young, it’s bright and bitter-sweet, closer to a green tea with a backbone: apricot, cut
+          grass, a long sweet aftertaste the Chinese call <em>huigan</em>. Over years in a humid
+          room it slowly darkens, the bitterness turns to depth, and notes of dried fruit, camphor
+          and old wood appear. That transformation is why people buy sheng in cakes and wait.
         </p>
 
         <h2>Shou: ripe, and ready</h2>
@@ -238,7 +238,9 @@ export const articles: Article[] = [
           <li>Pour from a little height for dense teas, gently down the side for delicate ones.</li>
         </ul>
 
-        <blockquote>Try one tea with two waters, side by side. You won’t need convincing.</blockquote>
+        <blockquote>
+          Try one tea with two waters, side by side. You won’t need convincing.
+        </blockquote>
 
         <p>
           Temperatures for every kind of tea are in our{" "}
@@ -255,10 +257,7 @@ export const articles: Article[] = [
     published: "2026-04-14",
     excerpt:
       "Two weeks in Yunnan during the first flush: early mornings, old trees, and why spring leaf is worth the wait.",
-    image: unsplash(
-      "1743401497688-5c3ab9b7447a",
-      "A flowering tree among terraced tea bushes",
-    ),
+    image: unsplash("1743401497688-5c3ab9b7447a", "A flowering tree among terraced tea bushes"),
     body: (
       <>
         <p>
@@ -270,9 +269,9 @@ export const articles: Article[] = [
         <h2>The day starts early</h2>
         <p>
           Pickers are on the slopes by six, taking a bud and two leaves by hand. By mid-afternoon
-          the baskets come down to the family’s workshop, where the leaf is spread to wilt on
-          bamboo trays, wok-fired in the evening, rolled by hand and laid out to dry in the next
-          morning’s sun.
+          the baskets come down to the family’s workshop, where the leaf is spread to wilt on bamboo
+          trays, wok-fired in the evening, rolled by hand and laid out to dry in the next morning’s
+          sun.
         </p>
 
         <h2>Old trees, small lots</h2>

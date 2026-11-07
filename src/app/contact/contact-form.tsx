@@ -54,7 +54,9 @@ export function ContactForm() {
           message: values.message,
         });
       } catch {
-        setErrors({ form: "We couldn’t send your message. Please try again, or email us directly." });
+        setErrors({
+          form: "We couldn’t send your message. Please try again, or email us directly.",
+        });
         return;
       }
       form.reset();
@@ -66,7 +68,8 @@ export function ContactForm() {
   function onInput(event: React.FormEvent<HTMLFormElement>) {
     const name = (event.target as HTMLInputElement).name as keyof Errors;
     setSent(false);
-    if (errors[name] || errors.form) setErrors((e) => ({ ...e, [name]: undefined, form: undefined }));
+    if (errors[name] || errors.form)
+      setErrors((e) => ({ ...e, [name]: undefined, form: undefined }));
   }
 
   return (
@@ -79,8 +82,20 @@ export function ContactForm() {
       )}
       <fieldset disabled={pending} className="flex flex-col gap-5">
         <div className="grid gap-5 sm:grid-cols-2">
-          <FormField name="name" label="Name" autoComplete="name" maxLength={100} error={errors.name} />
-          <FormField name="email" label="Email" type="email" autoComplete="email" error={errors.email} />
+          <FormField
+            name="name"
+            label="Name"
+            autoComplete="name"
+            maxLength={100}
+            error={errors.name}
+          />
+          <FormField
+            name="email"
+            label="Email"
+            type="email"
+            autoComplete="email"
+            error={errors.email}
+          />
         </div>
         <div className="grid gap-5 sm:grid-cols-2">
           <div className="flex flex-col gap-2">
@@ -95,7 +110,13 @@ export function ContactForm() {
           </div>
           <FormField name="order" label="Order number" hint="Optional" maxLength={64} />
         </div>
-        <TextareaField name="message" label="Message" rows={6} maxLength={5000} error={errors.message} />
+        <TextareaField
+          name="message"
+          label="Message"
+          rows={6}
+          maxLength={5000}
+          error={errors.message}
+        />
         <button type="submit" className="btn-primary self-start" aria-busy={pending}>
           {pending ? "Sending…" : "Send message"}
         </button>

@@ -76,7 +76,9 @@ export async function updateCartItem(
   else items.set(slug, quantity);
   await writeCart(items);
 
-  return quantity < qty && quantity > 0 ? { tone: "error", message: limitedMessage(quantity) } : null;
+  return quantity < qty && quantity > 0
+    ? { tone: "error", message: limitedMessage(quantity) }
+    : null;
 }
 
 export async function removeFromCart(formData: FormData) {

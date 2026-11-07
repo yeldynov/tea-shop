@@ -11,7 +11,8 @@
 
 /* Fonts are loaded with next/font in app/layout.tsx and exposed as CSS vars. */
 @theme inline {
-  --font-display: var(--font-cormorant), "Iowan Old Style", Georgia, "Songti SC", "Noto Serif SC", serif;
+  --font-display:
+    var(--font-cormorant), "Iowan Old Style", Georgia, "Songti SC", "Noto Serif SC", serif;
   --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
   --font-wordmark: var(--font-cormorant-sc), var(--font-cormorant), Georgia, serif;
 }

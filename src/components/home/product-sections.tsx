@@ -100,7 +100,10 @@ export async function ProductSpotlight() {
           <div className="flex flex-col gap-6 lg:py-8">
             <div className="flex flex-col gap-4">
               <p className="eyebrow">
-                In focus <span lang="zh-Hans" className="text-ink-faint not-italic">· {spotlight.nameZh}</span>
+                In focus{" "}
+                <span lang="zh-Hans" className="text-ink-faint not-italic">
+                  · {spotlight.nameZh}
+                </span>
               </p>
               <h2>
                 <Link href={`/products/${spotlight.slug}`}>{spotlight.name}</Link>

@@ -18,7 +18,10 @@ export function NewsletterForm() {
       try {
         result = await subscribe(formData);
       } catch {
-        result = { ok: false, error: "We couldn’t reach the server. Check your connection and try again." } as const;
+        result = {
+          ok: false,
+          error: "We couldn’t reach the server. Check your connection and try again.",
+        } as const;
       }
       if (!result.ok) {
         setError(result.error);
@@ -51,7 +54,14 @@ export function NewsletterForm() {
             className="input rounded-pill! px-5!"
           />
           {/* Honeypot for bots; hidden from people and assistive tech. */}
-          <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
+          <input
+            type="text"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden
+            className="hidden"
+          />
           <button type="submit" disabled={pending} aria-busy={pending} className="btn-ink shrink-0">
             {pending ? "Subscribing…" : "Subscribe"}
           </button>
@@ -70,7 +80,10 @@ export function NewsletterForm() {
       >
         <div className="flex flex-col items-center gap-4">
           <p className="eyebrow">
-            Subscribed <span lang="zh-Hans" className="text-ink-faint not-italic">· 谢谢</span>
+            Subscribed{" "}
+            <span lang="zh-Hans" className="text-ink-faint not-italic">
+              · 谢谢
+            </span>
           </p>
           <h2 id="newsletter-thanks" className="text-display-md">
             You’re on the list

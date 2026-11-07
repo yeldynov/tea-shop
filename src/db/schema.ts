@@ -51,7 +51,10 @@ export const products = pgTable(
     nameZh: text("name_zh"),
     origin: text("origin").notNull(),
     description: text("description").notNull(),
-    notes: text("notes").array().notNull().default(sql`'{}'::text[]`),
+    notes: text("notes")
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`),
     priceCents: integer("price_cents").notNull(),
     unit: text("unit").notNull(),
     badge: productBadge("badge"),

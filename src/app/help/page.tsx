@@ -122,8 +122,8 @@ const groups: { title: string; faqs: { q: string; a: React.ReactNode }[] }[] = [
         a: (
           <p>
             Slide a pu’er knife or a blunt butter knife into the edge of the cake, parallel to the
-            layers, and lever gently so the leaves come away in flakes rather than crumbs. Take
-            5–8 g for a session.
+            layers, and lever gently so the leaves come away in flakes rather than crumbs. Take 5–8
+            g for a session.
           </p>
         ),
       },
@@ -165,7 +165,10 @@ export default function HelpPage() {
       <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
         <header className="flex flex-col gap-4 lg:sticky lg:top-28 lg:self-start">
           <p className="eyebrow">
-            Help <span lang="zh-Hans" className="text-ink-faint not-italic">· 常见问题</span>
+            Help{" "}
+            <span lang="zh-Hans" className="text-ink-faint not-italic">
+              · 常见问题
+            </span>
           </p>
           <h1>Questions, answered</h1>
           <p className="lead max-w-md">

@@ -25,7 +25,8 @@ export function AdminNav() {
               href={item.href}
               className="chip"
               aria-current={
-                pathname === item.href || (item.href !== "/admin" && pathname.startsWith(`${item.href}/`))
+                pathname === item.href ||
+                (item.href !== "/admin" && pathname.startsWith(`${item.href}/`))
                   ? "page"
                   : undefined
               }

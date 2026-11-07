@@ -18,7 +18,8 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Your bag" };
 
 const errors = {
-  stock: "Some items sold out or have less stock than your bag asks for. Check your bag and try again.",
+  stock:
+    "Some items sold out or have less stock than your bag asks for. Check your bag and try again.",
   checkout: "We couldn’t start checkout. Please try again in a moment.",
 };
 
@@ -35,7 +36,10 @@ export default async function CartPage({ searchParams }: PageProps<"/cart">) {
     <div className="container-page section-sm">
       <header className="mb-8 flex flex-col gap-3 lg:mb-12">
         <p className="eyebrow">
-          Your bag <span lang="zh-Hans" className="text-ink-faint not-italic">· 购物袋</span>
+          Your bag{" "}
+          <span lang="zh-Hans" className="text-ink-faint not-italic">
+            · 购物袋
+          </span>
         </p>
         <h1>{itemCount > 0 ? `${itemCount} ${itemCount === 1 ? "item" : "items"}` : "Your bag"}</h1>
       </header>
@@ -85,7 +89,9 @@ export default async function CartPage({ searchParams }: PageProps<"/cart">) {
               <dt className="text-ink-soft">Subtotal</dt>
               <dd className="price text-2xl text-ink">{formatPrice(subtotalCents)}</dd>
             </dl>
-            <p className="text-sm text-ink-faint">You’ll enter your shipping address and pay on Stripe’s secure page.</p>
+            <p className="text-sm text-ink-faint">
+              You’ll enter your shipping address and pay on Stripe’s secure page.
+            </p>
             {session ? (
               <form action={startCheckout}>
                 <button type="submit" className="btn-primary btn-lg w-full">

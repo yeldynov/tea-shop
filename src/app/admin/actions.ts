@@ -41,7 +41,10 @@ const FOREIGN_KEY_VIOLATION = "23503";
 // What ON DELETE RESTRICT raises (not 23503).
 const RESTRICT_VIOLATION = "23001";
 
-export async function createProduct(_: AdminFormState, formData: FormData): Promise<AdminFormState> {
+export async function createProduct(
+  _: AdminFormState,
+  formData: FormData,
+): Promise<AdminFormState> {
   await requireAdmin();
   const parsed = parseProductForm(formData, { create: true });
   if (!parsed.ok) return invalid(parsed.errors);
@@ -54,8 +57,10 @@ export async function createProduct(_: AdminFormState, formData: FormData): Prom
       .values({ ...values, slug: slug! })
       .returning({ id: products.id });
   } catch (error) {
-    if (pgCode(error) === UNIQUE_VIOLATION) return invalid({ slug: "Another product uses this slug." });
-    if (pgCode(error) === FOREIGN_KEY_VIOLATION) return invalid({ categoryId: "Choose a collection." });
+    if (pgCode(error) === UNIQUE_VIOLATION)
+      return invalid({ slug: "Another product uses this slug." });
+    if (pgCode(error) === FOREIGN_KEY_VIOLATION)
+      return invalid({ categoryId: "Choose a collection." });
     throw error;
   }
   // Separate statement (the product id comes from the insert above). If it
@@ -64,7 +69,10 @@ export async function createProduct(_: AdminFormState, formData: FormData): Prom
   redirect(`/admin/products/${id}`);
 }
 
-export async function updateProduct(_: AdminFormState, formData: FormData): Promise<AdminFormState> {
+export async function updateProduct(
+  _: AdminFormState,
+  formData: FormData,
+): Promise<AdminFormState> {
   await requireAdmin();
   const id = parseId(String(formData.get("id")));
   const parsed = parseProductForm(formData, { create: false });
@@ -81,14 +89,18 @@ export async function updateProduct(_: AdminFormState, formData: FormData): Prom
       .returning({ id: products.id });
     if (updated.length === 0) return { tone: "error", message: "This product no longer exists." };
   } catch (error) {
-    if (pgCode(error) === FOREIGN_KEY_VIOLATION) return invalid({ categoryId: "Choose a collection." });
+    if (pgCode(error) === FOREIGN_KEY_VIOLATION)
+      return invalid({ categoryId: "Choose a collection." });
     throw error;
   }
   refresh();
   return { tone: "success", message: "Product saved." };
 }
 
-export async function createCategory(_: AdminFormState, formData: FormData): Promise<AdminFormState> {
+export async function createCategory(
+  _: AdminFormState,
+  formData: FormData,
+): Promise<AdminFormState> {
   await requireAdmin();
   const parsed = parseCategoryForm(formData, { create: true });
   if (!parsed.ok) return invalid(parsed.errors);
@@ -100,13 +112,17 @@ export async function createCategory(_: AdminFormState, formData: FormData): Pro
       .values({ ...parsed.data.values, slug: parsed.data.slug! })
       .returning({ id: categories.id });
   } catch (error) {
-    if (pgCode(error) === UNIQUE_VIOLATION) return invalid({ slug: "Another collection uses this slug." });
+    if (pgCode(error) === UNIQUE_VIOLATION)
+      return invalid({ slug: "Another collection uses this slug." });
     throw error;
   }
   redirect(`/admin/collections/${id}`);
 }
 
-export async function updateCategory(_: AdminFormState, formData: FormData): Promise<AdminFormState> {
+export async function updateCategory(
+  _: AdminFormState,
+  formData: FormData,
+): Promise<AdminFormState> {
   await requireAdmin();
   const id = parseId(String(formData.get("id")));
   const parsed = parseCategoryForm(formData, { create: false });
@@ -123,7 +139,10 @@ export async function updateCategory(_: AdminFormState, formData: FormData): Pro
   return { tone: "success", message: "Collection saved." };
 }
 
-export async function deleteCategory(_: AdminFormState, formData: FormData): Promise<AdminFormState> {
+export async function deleteCategory(
+  _: AdminFormState,
+  formData: FormData,
+): Promise<AdminFormState> {
   await requireAdmin();
   const id = parseId(String(formData.get("id")));
   if (id) {
@@ -181,7 +200,8 @@ export async function updateStock(_: AdminFormState, formData: FormData): Promis
   return changed.length === 0
     ? {
         tone: "error",
-        message: "Stock changed since you loaded this page (a checkout reserved or released some). Check the new quantity and try again.",
+        message:
+          "Stock changed since you loaded this page (a checkout reserved or released some). Check the new quantity and try again.",
       }
     : { tone: "success", message: `Stock set to ${quantity}.` };
 }

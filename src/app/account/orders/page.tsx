@@ -48,7 +48,9 @@ export default async function OrdersPage() {
                     </span>
                   </div>
                   <div className="flex items-center gap-4 sm:gap-6">
-                    <span className={orderStatusBadge[order.status]}>{orderStatusLabels[order.status]}</span>
+                    <span className={orderStatusBadge[order.status]}>
+                      {orderStatusLabels[order.status]}
+                    </span>
                     <span className="price text-ink">
                       {formatPrice(order.amountTotalCents ?? order.subtotalCents)}
                     </span>

@@ -46,7 +46,10 @@ export default async function SearchPage({ searchParams }: PageProps<"/search">)
         <header className="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
           <div className="flex flex-col items-center gap-4">
             <p className="eyebrow">
-              Find your tea <span lang="zh-Hans" className="text-ink-faint not-italic">· 搜索</span>
+              Find your tea{" "}
+              <span lang="zh-Hans" className="text-ink-faint not-italic">
+                · 搜索
+              </span>
             </p>
             <h1>Search</h1>
           </div>

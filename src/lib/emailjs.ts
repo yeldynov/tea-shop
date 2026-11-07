@@ -10,7 +10,13 @@ const EMAILJS = {
   user_id: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
 };
 
-type TemplateParams = { name: string; email: string; topic: string; order: string; message: string };
+type TemplateParams = {
+  name: string;
+  email: string;
+  topic: string;
+  order: string;
+  message: string;
+};
 
 /**
  * Sends one email through the contact template (to the shop's inbox). Server
@@ -21,13 +27,21 @@ export async function sendEmailJs(params: TemplateParams, accessToken?: string) 
   const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...EMAILJS, accessToken, template_params: { site: site.name, ...params } }),
+    body: JSON.stringify({
+      ...EMAILJS,
+      accessToken,
+      template_params: { site: site.name, ...params },
+    }),
   });
   if (!res.ok) throw new Error(`EmailJS ${res.status}: ${await res.text()}`);
 }
 
 /** Server-only: tells the shop about a new registration or subscriber. Never throws. */
-export async function notifyOwner(topic: "New registration" | "New subscriber", email: string, name?: string) {
+export async function notifyOwner(
+  topic: "New registration" | "New subscriber",
+  email: string,
+  name?: string,
+) {
   try {
     await sendEmailJs(
       {

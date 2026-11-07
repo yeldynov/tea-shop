@@ -9,7 +9,9 @@ import { requireUser } from "@/lib/session";
 export async function GET(request: Request) {
   const { user } = await requireUser("/cart");
   const orderId = new URL(request.url).searchParams.get("order") ?? "";
-  const order = /^[0-9a-f-]{36}$/.test(orderId) ? await getOrderForUser(orderId, user.id) : undefined;
+  const order = /^[0-9a-f-]{36}$/.test(orderId)
+    ? await getOrderForUser(orderId, user.id)
+    : undefined;
   if (order) await cancelPendingOrder(order);
   redirect("/cart");
 }

@@ -47,7 +47,10 @@ export function unsplash(id: string, alt: string): Photo {
 }
 
 export const photos = {
-  heroMountain: unsplash("1626173842682-f5a3e20d4b9c", "A forested mountain wrapped in drifting mist"),
+  heroMountain: unsplash(
+    "1626173842682-f5a3e20d4b9c",
+    "A forested mountain wrapped in drifting mist",
+  ),
   teaPickers: unsplash(
     "1743401462369-44e568d93027",
     "Pickers harvesting tea across a lush green hillside",
