@@ -42,7 +42,7 @@ Next.js 16 (App Router, React 19) + TypeScript + Tailwind CSS v4, Better Auth, D
   - `checkout.session.expired`, `checkout.session.async_payment_failed` and `/checkout/cancel` call `releaseOrder`, which returns the stock.
   - Every status change is a single `… where status = 'pending'` statement, so duplicate webhooks are harmless. Keep it that way.
   - Link to `/checkout/cancel` with `<a>`, not `<Link>`: a prefetch would cancel the order.
-- **Admin** (`src/app/admin/`): products, collections, stock, read-only orders and read-only contacts. All writes are server actions in `src/app/admin/actions.ts`, each starting with `await requireAdmin()`. Input is parsed by `src/lib/admin-forms.ts` (`pnpm tsx src/lib/admin-forms.check.ts`), and reads go through `src/lib/admin-queries.ts`.
+- **Admin** (`src/app/admin/`): products, collections, stock, read-only orders and read-only contacts. All writes are server actions in `src/app/admin/actions.ts`, each starting with `await requireAdmin()`. Input is parsed by `src/lib/admin-forms.ts` (`src/lib/admin-forms.test.ts`), and reads go through `src/lib/admin-queries.ts`.
   - Product and collection slugs are fixed after creation (cart cookies and URLs use them). Products aren't deleted, and order status is never edited by hand.
   - `updateStock` only writes if the quantity still equals what the page showed, so it can't undo a concurrent checkout reservation. Keep stock writes conditional.
   - Client forms submit through `useAdminForm` (onSubmit, not `<form action>`) so a failed validation doesn't reset the inputs.
