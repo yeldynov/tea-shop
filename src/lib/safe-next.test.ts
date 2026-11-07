@@ -11,9 +11,16 @@ describe("safeNext", () => {
     expect(safeNext(input)).toBe(input);
   });
 
+  it("returns the normalized path, resolving .. segments", () => {
+    expect(safeNext("/a/../account")).toBe("/account");
+  });
+
   it.each([
     { rule: "protocol-relative URL", input: "//evil.com" },
     { rule: "backslash, which browsers treat as a slash", input: "/\\evil.com" },
+    { rule: "tab, which browsers strip from URLs", input: "/\t/evil.com" },
+    { rule: "newline, which browsers strip from URLs", input: "/\n/evil.com" },
+
     { rule: "absolute URL", input: "https://evil.com" },
     { rule: "a relative path without a leading slash", input: "account" },
     { rule: "empty string", input: "" },
