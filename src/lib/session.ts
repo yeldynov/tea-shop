@@ -21,13 +21,3 @@ export async function requireAdmin(next = "/admin") {
   if (session.user.role !== "admin") notFound();
   return session;
 }
-
-/** Only same-site paths; blocks `//evil.com` and absolute URLs. */
-export function safeNext(value: unknown, fallback = "/account") {
-  return typeof value === "string" &&
-    value.startsWith("/") &&
-    !value.startsWith("//") &&
-    !value.startsWith("/\\")
-    ? value
-    : fallback;
-}

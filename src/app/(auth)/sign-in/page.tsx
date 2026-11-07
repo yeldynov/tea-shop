@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 
 import { FormMessage } from "@/components/form-field";
 import { googleEnabled } from "@/lib/auth";
-import { getSession, safeNext } from "@/lib/session";
+import { getSession } from "@/lib/session";
+import { safeNext } from "@/lib/safe-next";
 
 import { GoogleButton, SignInForm } from "../auth-forms";
 import { OrDivider } from "../or-divider";
@@ -46,7 +47,7 @@ export default async function SignInPage({ searchParams }: PageProps<"/sign-in">
 
       <SignInForm next={next} />
 
-      <p className="text-center text-sm text-ink-soft">
+      <p className="text-sm text-center text-ink-soft">
         New here?{" "}
         <Link href={`/sign-up?next=${encodeURIComponent(next)}`} className="link">
           Create an account
