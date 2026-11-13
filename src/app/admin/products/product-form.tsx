@@ -45,7 +45,13 @@ export function ProductForm({
         <section className="card flex flex-col gap-5 p-6 sm:p-8">
           <h2 className="text-display-sm">Basics</h2>
           <div className="grid gap-5 sm:grid-cols-2">
-            <FormField name="name" label="Name" defaultValue={v?.name} maxLength={120} error={error("name")} />
+            <FormField
+              name="name"
+              label="Name"
+              defaultValue={v?.name}
+              maxLength={120}
+              error={error("name")}
+            />
             <FormField
               name="nameZh"
               label="Chinese name (optional)"
@@ -88,7 +94,12 @@ export function ProductForm({
                 </option>
               ))}
             </SelectField>
-            <SelectField name="badge" label="Badge" defaultValue={v?.badge ?? ""} error={error("badge")}>
+            <SelectField
+              name="badge"
+              label="Badge"
+              defaultValue={v?.badge ?? ""}
+              error={error("badge")}
+            >
               <option value="">None</option>
               {badges.map((b) => (
                 <option key={b}>{b}</option>
@@ -104,7 +115,13 @@ export function ProductForm({
               defaultValue={v?.price}
               error={error("price")}
             />
-            <FormField name="unit" label="Unit" placeholder="50 g" defaultValue={v?.unit} error={error("unit")} />
+            <FormField
+              name="unit"
+              label="Unit"
+              placeholder="50 g"
+              defaultValue={v?.unit}
+              error={error("unit")}
+            />
             {create && (
               <FormField
                 name="stock"
@@ -151,13 +168,35 @@ export function ProductForm({
         <section className="card flex flex-col gap-5 p-6 sm:p-8">
           <div className="flex flex-col gap-1">
             <h2 className="text-display-sm">Brewing</h2>
-            <p className="text-sm text-ink-soft">Teas only. Fill in all four, or leave them empty.</p>
+            <p className="text-sm text-ink-soft">
+              Teas only. Fill in all four, or leave them empty.
+            </p>
           </div>
           <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
-            <FormField name="brew-leaf" label="Leaf" placeholder="7 g" defaultValue={v?.brew.leaf} />
-            <FormField name="brew-water" label="Water" placeholder="100 °C" defaultValue={v?.brew.water} />
-            <FormField name="brew-time" label="Time" placeholder="5–10 s" defaultValue={v?.brew.time} />
-            <FormField name="brew-infusions" label="Infusions" placeholder="8+" defaultValue={v?.brew.infusions} />
+            <FormField
+              name="brew-leaf"
+              label="Leaf"
+              placeholder="7 g"
+              defaultValue={v?.brew.leaf}
+            />
+            <FormField
+              name="brew-water"
+              label="Water"
+              placeholder="100 °C"
+              defaultValue={v?.brew.water}
+            />
+            <FormField
+              name="brew-time"
+              label="Time"
+              placeholder="5–10 s"
+              defaultValue={v?.brew.time}
+            />
+            <FormField
+              name="brew-infusions"
+              label="Infusions"
+              placeholder="8+"
+              defaultValue={v?.brew.infusions}
+            />
           </div>
           {error("brew") && (
             <p role="alert" className="text-sm text-danger">
@@ -193,7 +232,12 @@ export function ProductForm({
       </fieldset>
 
       {state && <FormMessage tone={state.tone}>{state.message}</FormMessage>}
-      <button type="submit" className="btn-primary self-start" disabled={pending} aria-busy={pending}>
+      <button
+        type="submit"
+        className="btn-primary self-start"
+        disabled={pending}
+        aria-busy={pending}
+      >
         {pending ? "Saving…" : create ? "Create product" : "Save changes"}
       </button>
     </form>

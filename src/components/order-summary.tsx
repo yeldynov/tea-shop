@@ -34,7 +34,10 @@ export function OrderSummary({ order }: { order: Order }) {
         </h2>
         <ul className="flex flex-col">
           {order.items.map((item) => (
-            <li key={item.productId} className="flex items-center gap-4 border-b py-4 last:border-b-0">
+            <li
+              key={item.productId}
+              className="flex items-center gap-4 border-b py-4 last:border-b-0"
+            >
               <Link href={`/products/${item.product.slug}`} className="media w-14 shrink-0">
                 <Image src={item.product.imageUrl} alt="" fill sizes="3.5rem" />
               </Link>

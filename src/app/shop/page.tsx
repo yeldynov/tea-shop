@@ -35,7 +35,10 @@ export default async function ShopPage() {
 
         <header className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
           <p className="eyebrow">
-            The whole shelf <span lang="zh-Hans" className="text-ink-faint not-italic">· 全部</span>
+            The whole shelf{" "}
+            <span lang="zh-Hans" className="text-ink-faint not-italic">
+              · 全部
+            </span>
           </p>
           <h1>Shop all</h1>
           <p className="lead">

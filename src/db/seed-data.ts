@@ -23,10 +23,7 @@ export const seedCategories: Category[] = [
     name: "Oolong",
     nameZh: "乌龙",
     blurb: "Wuyi rock teas and Anxi rolled leaf.",
-    image: unsplash(
-      "1558160074-4d7d8bdf4256",
-      "A glass cup of amber oolong beside a clay teapot",
-    ),
+    image: unsplash("1558160074-4d7d8bdf4256", "A glass cup of amber oolong beside a clay teapot"),
   },
   {
     slug: "black-tea",
@@ -53,7 +50,10 @@ export const seedCategories: Category[] = [
     name: "White Tea",
     nameZh: "白茶",
     blurb: "Sun-withered buds and leaves from Fuding.",
-    image: unsplash("1788963704659-ddbef83daecc", "Loose white tea leaves in shades of silver and amber"),
+    image: unsplash(
+      "1788963704659-ddbef83daecc",
+      "Loose white tea leaves in shades of silver and amber",
+    ),
   },
   {
     slug: "teaware",
@@ -86,7 +86,10 @@ export const seedProducts: SeedProduct[] = [
     brew: { leaf: "7 g", water: "100 °C", time: "5–10 s", infusions: "8+" },
     image: unsplash("1600974712780-9dc8659e89f7", "Dark, twisted rock oolong leaves"),
     gallery: [
-      unsplash("1571505463102-48bae91c6028", "Dark tea poured from a clay teapot into a glass pitcher"),
+      unsplash(
+        "1571505463102-48bae91c6028",
+        "Dark tea poured from a clay teapot into a glass pitcher",
+      ),
       unsplash("1558160074-4d7d8bdf4256", "A glass cup of amber oolong beside a clay teapot"),
     ],
   },
@@ -110,8 +113,14 @@ export const seedProducts: SeedProduct[] = [
     brew: { leaf: "6 g", water: "100 °C", time: "8–15 s", infusions: "10+" },
     image: unsplash("1733138187329-1663b79464b3", "Fine, dark ripe pu'er leaves"),
     gallery: [
-      unsplash("1689067468083-2e5f44e43f40", "Cups of amber tea and a bowl of dark leaves on a carved tray"),
-      unsplash("1685819039497-199e732ba7f3", "Clay teapots and cups on a tea table as tea is poured"),
+      unsplash(
+        "1689067468083-2e5f44e43f40",
+        "Cups of amber tea and a bowl of dark leaves on a carved tray",
+      ),
+      unsplash(
+        "1685819039497-199e732ba7f3",
+        "Clay teapots and cups on a tea table as tea is poured",
+      ),
     ],
   },
   {
@@ -181,9 +190,15 @@ export const seedProducts: SeedProduct[] = [
       { term: "Storage", detail: "Dry Kunming, 9 years" },
     ],
     brew: { leaf: "6 g", water: "95–100 °C", time: "5–10 s", infusions: "12+" },
-    image: unsplash("1683714548668-e03fedfa5a89", "A pu'er tea cake in a printed wrapper beside a clay teapot"),
+    image: unsplash(
+      "1683714548668-e03fedfa5a89",
+      "A pu'er tea cake in a printed wrapper beside a clay teapot",
+    ),
     gallery: [
-      unsplash("1689067468083-2e5f44e43f40", "Cups of amber tea and a bowl of dark leaves on a carved tray"),
+      unsplash(
+        "1689067468083-2e5f44e43f40",
+        "Cups of amber tea and a bowl of dark leaves on a carved tray",
+      ),
     ],
   },
   {
@@ -205,7 +220,10 @@ export const seedProducts: SeedProduct[] = [
       { term: "Caffeine", detail: "Low–medium" },
     ],
     brew: { leaf: "5 g", water: "85–90 °C", time: "20–30 s", infusions: "6+" },
-    image: unsplash("1788963704659-ddbef83daecc", "Loose white tea leaves in shades of silver and amber"),
+    image: unsplash(
+      "1788963704659-ddbef83daecc",
+      "Loose white tea leaves in shades of silver and amber",
+    ),
     gallery: [
       unsplash("1763824371971-cf1b3a1f859c", "A white gaiwan and cups on a dark background"),
     ],
@@ -231,7 +249,10 @@ export const seedProducts: SeedProduct[] = [
     brew: { leaf: "4 g", water: "80 °C", time: "30–45 s", infusions: "3–4" },
     image: unsplash("1760074057731-83e375873eb5", "Flat, sword-shaped dried green tea leaves"),
     gallery: [
-      unsplash("1641997825980-cbaf406765db", "Green tea leaves in a bowl beside a teapot and two cups"),
+      unsplash(
+        "1641997825980-cbaf406765db",
+        "Green tea leaves in a bowl beside a teapot and two cups",
+      ),
     ],
   },
   {
@@ -316,9 +337,15 @@ export const seedProducts: SeedProduct[] = [
       { term: "Material", detail: "Clay, bamboo" },
       { term: "Care", detail: "Dry the tray after use" },
     ],
-    image: unsplash("1674749232554-2ac15ced3954", "A clay teapot and two cups of amber tea on a tray"),
+    image: unsplash(
+      "1674749232554-2ac15ced3954",
+      "A clay teapot and two cups of amber tea on a tray",
+    ),
     gallery: [
-      unsplash("1629440408433-a9e951bfbcd8", "Hot water poured from a kettle into a small clay cup"),
+      unsplash(
+        "1629440408433-a9e951bfbcd8",
+        "Hot water poured from a kettle into a small clay cup",
+      ),
     ],
   },
 ];

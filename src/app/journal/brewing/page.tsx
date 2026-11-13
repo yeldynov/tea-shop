@@ -59,13 +59,62 @@ const steps = [
 ];
 
 const chart = [
-  { tea: "Green", leaf: "4 g", water: "80–85°C", first: "10 s", rounds: "3–4", href: "/collections/green-tea" },
-  { tea: "White", leaf: "5 g", water: "90°C", first: "15 s", rounds: "6–8", href: "/collections/white-tea" },
-  { tea: "Rolled oolong", leaf: "6 g", water: "95°C", first: "15 s", rounds: "6–8", href: "/collections/oolong" },
-  { tea: "Rock oolong", leaf: "7 g", water: "100°C", first: "5 s", rounds: "7–9", href: "/collections/oolong" },
-  { tea: "Black tea", leaf: "5 g", water: "90–95°C", first: "8 s", rounds: "5–6", href: "/collections/black-tea" },
-  { tea: "Sheng pu’er", leaf: "7 g", water: "95°C", first: "5 s", rounds: "10+", href: "/collections/puer" },
-  { tea: "Shou pu’er", leaf: "7 g", water: "100°C", first: "8 s", rounds: "10+", href: "/collections/puer" },
+  {
+    tea: "Green",
+    leaf: "4 g",
+    water: "80–85°C",
+    first: "10 s",
+    rounds: "3–4",
+    href: "/collections/green-tea",
+  },
+  {
+    tea: "White",
+    leaf: "5 g",
+    water: "90°C",
+    first: "15 s",
+    rounds: "6–8",
+    href: "/collections/white-tea",
+  },
+  {
+    tea: "Rolled oolong",
+    leaf: "6 g",
+    water: "95°C",
+    first: "15 s",
+    rounds: "6–8",
+    href: "/collections/oolong",
+  },
+  {
+    tea: "Rock oolong",
+    leaf: "7 g",
+    water: "100°C",
+    first: "5 s",
+    rounds: "7–9",
+    href: "/collections/oolong",
+  },
+  {
+    tea: "Black tea",
+    leaf: "5 g",
+    water: "90–95°C",
+    first: "8 s",
+    rounds: "5–6",
+    href: "/collections/black-tea",
+  },
+  {
+    tea: "Sheng pu’er",
+    leaf: "7 g",
+    water: "95°C",
+    first: "5 s",
+    rounds: "10+",
+    href: "/collections/puer",
+  },
+  {
+    tea: "Shou pu’er",
+    leaf: "7 g",
+    water: "100°C",
+    first: "8 s",
+    rounds: "10+",
+    href: "/collections/puer",
+  },
 ];
 
 const fixes = [
@@ -225,7 +274,10 @@ export default function BrewingGuidePage() {
                 <tbody className="price">
                   {chart.map((row) => (
                     <tr key={row.tea} className="border-b border-matcha/25 last:border-0">
-                      <th scope="row" className="py-4 pr-4 font-display text-xl font-normal text-ink">
+                      <th
+                        scope="row"
+                        className="py-4 pr-4 font-display text-xl font-normal text-ink"
+                      >
                         <Link href={row.href} className="link-quiet">
                           {row.tea}
                         </Link>

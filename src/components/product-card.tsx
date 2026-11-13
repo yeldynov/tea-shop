@@ -59,7 +59,9 @@ export function ProductCard({
               {product.name}
             </Link>
           </h3>
-          <p className="price shrink-0 text-[0.9375rem] text-ink">{formatPrice(product.priceCents)}</p>
+          <p className="price shrink-0 text-[0.9375rem] text-ink">
+            {formatPrice(product.priceCents)}
+          </p>
         </div>
         <p className="text-sm text-ink-soft">
           {product.notes.join(" · ")}

@@ -24,7 +24,8 @@ export function AccountNav() {
               href={item.href}
               className="chip"
               aria-current={
-                pathname === item.href || (item.href !== "/account" && pathname.startsWith(`${item.href}/`))
+                pathname === item.href ||
+                (item.href !== "/account" && pathname.startsWith(`${item.href}/`))
                   ? "page"
                   : undefined
               }

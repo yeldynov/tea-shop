@@ -37,7 +37,10 @@ const regions = [
     zh: "云南",
     teas: "Pu’er, Dian hong black tea",
     body: "In the southwest, on the border with Laos and Myanmar, old tea trees grow among the forest on the Menghai and Lincang mountains. Our sheng and shou pu’er come from family workshops here, pressed from single-mountain maocha we choose by the day, and so do the golden-tipped Dian hong black teas.",
-    image: unsplash("1683714548668-e03fedfa5a89", "A pu'er tea cake in a printed wrapper beside a clay teapot"),
+    image: unsplash(
+      "1683714548668-e03fedfa5a89",
+      "A pu'er tea cake in a printed wrapper beside a clay teapot",
+    ),
     links: [
       { label: "Pu’er", href: "/collections/puer" },
       { label: "Black tea", href: "/collections/black-tea" },
@@ -57,10 +60,26 @@ const regions = [
 ];
 
 const year = [
-  { season: "Spring", months: "Mar – May", body: "First flush. We’re in Yunnan and Fujian, tasting maocha and choosing lots." },
-  { season: "Summer", months: "Jun – Aug", body: "Spring teas arrive. Rock oolong is roasted, then rests." },
-  { season: "Autumn", months: "Sep – Nov", body: "Autumn oolong picking. Last year’s roasts are ready to drink." },
-  { season: "Winter", months: "Dec – Feb", body: "The farms rest. We taste through the cellar and plan next spring." },
+  {
+    season: "Spring",
+    months: "Mar – May",
+    body: "First flush. We’re in Yunnan and Fujian, tasting maocha and choosing lots.",
+  },
+  {
+    season: "Summer",
+    months: "Jun – Aug",
+    body: "Spring teas arrive. Rock oolong is roasted, then rests.",
+  },
+  {
+    season: "Autumn",
+    months: "Sep – Nov",
+    body: "Autumn oolong picking. Last year’s roasts are ready to drink.",
+  },
+  {
+    season: "Winter",
+    months: "Dec – Feb",
+    body: "The farms rest. We taste through the cellar and plan next spring.",
+  },
 ];
 
 export default function SourcingPage() {
@@ -153,7 +172,12 @@ export default function SourcingPage() {
         {regions.map((r, i) => (
           <article key={r.name} className="split">
             <div className={`media aspect-4/3 rounded-card ${i % 2 ? "lg:order-2" : ""}`}>
-              <Image src={r.image.src} alt={r.image.alt} fill sizes="(min-width: 64rem) 45vw, 100vw" />
+              <Image
+                src={r.image.src}
+                alt={r.image.alt}
+                fill
+                sizes="(min-width: 64rem) 45vw, 100vw"
+              />
             </div>
             <div className="flex flex-col gap-4">
               <p className="label text-ink-faint">{r.teas}</p>

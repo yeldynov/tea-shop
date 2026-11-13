@@ -40,10 +40,7 @@ export default async function CollectionPage({ params }: PageProps<"/collections
   const collection = await getCategory(slug);
   if (!collection) notFound();
 
-  const [products, collections] = await Promise.all([
-    getProductsByCategory(slug),
-    getCategories(),
-  ]);
+  const [products, collections] = await Promise.all([getProductsByCategory(slug), getCategories()]);
   const others = collections.filter((c) => c.slug !== slug);
 
   return (

@@ -89,11 +89,7 @@ export const getProducts = cache(async () => {
  */
 export const searchProducts = cache(async (query: string) => {
   // Apostrophes are ignored on both sides so "puer" and "pu'er" find "Pu’er".
-  const terms = query
-    .replace(/['’]/g, "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 8);
+  const terms = query.replace(/['’]/g, "").split(/\s+/).filter(Boolean).slice(0, 8);
   if (terms.length === 0) return [];
   const matches = (text: SQL, pattern: string) =>
     sql`translate(${text}, ${"'’"}, '') ilike ${pattern}`;

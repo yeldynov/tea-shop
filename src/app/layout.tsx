@@ -37,7 +37,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${cormorantSC.variable} ${jost.variable} h-full`}>
+    <html
+      lang="en"
+      className={`${cormorant.variable} ${cormorantSC.variable} ${jost.variable} h-full`}
+    >
       <body className="flex min-h-full flex-col">
         <SiteHeader />
         <main className="flex-1">{children}</main>

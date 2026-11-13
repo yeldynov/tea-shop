@@ -1,5 +1,5 @@
 // Cart rules shared by the cart actions, `cart-queries.ts` and the UI. No Next
-// imports so `cart.check.ts` can run under tsx.
+// imports so `cart.test.ts` can run in Vitest's node environment.
 //
 // The cart is an httpOnly cookie holding only `{ slug: quantity }`. Prices and
 // stock are never stored; they're read from the database on every render and

@@ -1,4 +1,10 @@
-export function TastingNotes({ notes, label = "Tasting notes" }: { notes: string[]; label?: string }) {
+export function TastingNotes({
+  notes,
+  label = "Tasting notes",
+}: {
+  notes: string[];
+  label?: string;
+}) {
   return (
     <ul className="flex flex-wrap gap-2" aria-label={label}>
       {notes.map((note) => (

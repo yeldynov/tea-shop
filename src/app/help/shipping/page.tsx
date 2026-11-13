@@ -23,7 +23,10 @@ export default function ShippingPage() {
 
       <header className="mb-10 flex flex-col gap-4 md:mb-14">
         <p className="eyebrow">
-          Help <span lang="zh-Hans" className="text-ink-faint not-italic">· 配送与退货</span>
+          Help{" "}
+          <span lang="zh-Hans" className="text-ink-faint not-italic">
+            · 配送与退货
+          </span>
         </p>
         <h1>Shipping &amp; returns</h1>
         <p className="lead max-w-2xl">
@@ -61,14 +64,11 @@ export default function ShippingPage() {
         </p>
         <ol>
           <li>
-            Email{" "}
-            <a href={`mailto:${site.email}`}>{site.email}</a> with your order number and what you’d
-            like to send back.
+            Email <a href={`mailto:${site.email}`}>{site.email}</a> with your order number and what
+            you’d like to send back.
           </li>
           <li>We’ll reply with the return address, usually within one working day.</li>
-          <li>
-            Send it back well packed. We refund within 5 working days of it arriving with us.
-          </li>
+          <li>Send it back well packed. We refund within 5 working days of it arriving with us.</li>
         </ol>
         <p>
           For hygiene reasons we can’t take back opened tea. If a tea disappointed you, please tell
@@ -77,9 +77,8 @@ export default function ShippingPage() {
 
         <h2>Damaged or missing</h2>
         <p>
-          If something arrives broken or doesn’t arrive at all, send us a photo or your order
-          number within 14 days. We’ll replace it or refund it, and you won’t need to send anything
-          back.
+          If something arrives broken or doesn’t arrive at all, send us a photo or your order number
+          within 14 days. We’ll replace it or refund it, and you won’t need to send anything back.
         </p>
 
         <p>

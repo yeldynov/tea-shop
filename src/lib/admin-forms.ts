@@ -91,9 +91,7 @@ export function parseProductForm(formData: FormData, { create }: { create: boole
   if (priceCents === undefined) f.errors.price = "Enter a price in dollars, e.g. 18.50.";
 
   const badgeValue = f.raw("badge");
-  const badge = badgeValue
-    ? productBadge.enumValues.find((value) => value === badgeValue)
-    : null;
+  const badge = badgeValue ? productBadge.enumValues.find((value) => value === badgeValue) : null;
   if (badge === undefined) f.errors.badge = "Choose a badge from the list.";
 
   const notes = f
@@ -119,7 +117,8 @@ export function parseProductForm(formData: FormData, { create }: { create: boole
   const brew = brewValues.every(Boolean)
     ? { leaf: brewValues[0], water: brewValues[1], time: brewValues[2], infusions: brewValues[3] }
     : null;
-  if (!brew && brewValues.some(Boolean)) f.errors.brew = "Fill in all four brewing fields, or none.";
+  if (!brew && brewValues.some(Boolean))
+    f.errors.brew = "Fill in all four brewing fields, or none.";
 
   const imageUrl = f.image("imageUrl");
   const imageAlt = f.text("imageAlt", "image alt text", 200);
@@ -128,7 +127,10 @@ export function parseProductForm(formData: FormData, { create }: { create: boole
     const [src = "", ...alt] = line.split("|");
     return { src: src.trim(), alt: alt.join("|").trim() };
   });
-  if (gallery.length > 8 || gallery.some((g) => !isImageUrl(g.src) || !g.alt || g.alt.length > 200)) {
+  if (
+    gallery.length > 8 ||
+    gallery.some((g) => !isImageUrl(g.src) || !g.alt || g.alt.length > 200)
+  ) {
     f.errors.gallery = "Write up to 8 lines like “https://images.unsplash.com/photo-… | Alt text”.";
   }
 
@@ -181,5 +183,10 @@ export function parseStockForm(formData: FormData) {
     f.errors.quantity = "Reload the page and try again.";
   }
   const restockNote = f.text("restockNote", "a note", 200, { optional: true });
-  return done(f.errors, { productId, quantity, expectedQuantity, restockNote: restockNote || null });
+  return done(f.errors, {
+    productId,
+    quantity,
+    expectedQuantity,
+    restockNote: restockNote || null,
+  });
 }

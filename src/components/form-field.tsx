@@ -44,7 +44,12 @@ export function TextareaField({
   hint,
   error,
   ...textarea
-}: React.ComponentProps<"textarea"> & { name: string; label: string; hint?: string; error?: string }) {
+}: React.ComponentProps<"textarea"> & {
+  name: string;
+  label: string;
+  hint?: string;
+  error?: string;
+}) {
   const describedBy = error ? `${name}-error` : hint ? `${name}-hint` : undefined;
 
   return (

@@ -23,7 +23,8 @@ export function GardenStory() {
           <div className="flex max-w-3xl flex-col items-center gap-6 text-cream">
             <p className="eyebrow text-cream/80">From the tea mountains</p>
             <p className="font-display text-display-lg leading-[1.1] font-light text-balance text-cream italic">
-              “A good pu’er keeps changing for decades. We buy from people who think in decades too.”
+              “A good pu’er keeps changing for decades. We buy from people who think in decades
+              too.”
             </p>
             <Link href="/about/sourcing" className="btn-glass mt-2">
               How we source

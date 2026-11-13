@@ -1,0 +1,6 @@
+# Generated or third-party; reformatting them only creates churn.
+drizzle/
+src/db/auth-schema.ts
+pnpm-lock.yaml
+.agents/
+emailjs/
