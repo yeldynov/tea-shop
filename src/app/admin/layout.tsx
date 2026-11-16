@@ -2,6 +2,10 @@ import { AdminNav } from "./admin-nav";
 
 // Navigation only. Each page and server action checks requireAdmin() itself
 // (layouts don't re-run on navigation).
+// Reads cookies or the database before anything else, so the page may block
+// instead of streaming from a static shell.
+export const instant = false;
+
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
     <div className="container-page section-sm">

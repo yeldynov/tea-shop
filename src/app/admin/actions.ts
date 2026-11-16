@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -13,6 +13,7 @@ import {
   parseStockForm,
 } from "@/lib/admin-forms";
 import { parseId } from "@/lib/admin-queries";
+import { invalidateProducts } from "@/lib/catalog-cache";
 import { requireAdmin } from "@/lib/session";
 
 // Every action starts with requireAdmin(): server actions are public POST
@@ -66,6 +67,7 @@ export async function createProduct(
   // Separate statement (the product id comes from the insert above). If it
   // fails, the product simply shows as sold out until stock is set.
   await db.insert(productStock).values({ productId: id, quantity: stock! });
+  invalidateProducts([slug!]); // drops a cached "not found" for this slug
   redirect(`/admin/products/${id}`);
 }
 
@@ -86,8 +88,9 @@ export async function updateProduct(
       .update(products)
       .set(parsed.data.values)
       .where(eq(products.id, id))
-      .returning({ id: products.id });
+      .returning({ id: products.id, slug: products.slug });
     if (updated.length === 0) return { tone: "error", message: "This product no longer exists." };
+    invalidateProducts(updated.map((p) => p.slug));
   } catch (error) {
     if (pgCode(error) === FOREIGN_KEY_VIOLATION)
       return invalid({ categoryId: "Choose a collection." });
@@ -135,6 +138,12 @@ export async function updateCategory(
     .where(eq(categories.id, id))
     .returning({ id: categories.id });
   if (updated.length === 0) return { tone: "error", message: "This collection no longer exists." };
+  // Cached products embed their collection's name and image.
+  const members = await db
+    .select({ slug: products.slug })
+    .from(products)
+    .where(eq(products.categoryId, id));
+  invalidateProducts(members.map((p) => p.slug));
   refresh();
   return { tone: "success", message: "Collection saved." };
 }
@@ -170,7 +179,11 @@ export async function updateStock(_: AdminFormState, formData: FormData): Promis
   if (!parsed.ok) return invalid(parsed.errors);
   const { productId, quantity, expectedQuantity, restockNote } = parsed.data;
 
-  let changed: unknown[];
+  // RETURNING the slug (a subquery) saves a second round trip for the cache tag.
+  const returnSlug = {
+    slug: sql<string>`(select ${products.slug} from ${products} where ${products.id} = ${productStock.productId})`,
+  };
+  let changed: { slug: string }[];
   try {
     changed =
       expectedQuantity === null
@@ -179,7 +192,7 @@ export async function updateStock(_: AdminFormState, formData: FormData): Promis
             .insert(productStock)
             .values({ productId, quantity, restockNote })
             .onConflictDoNothing()
-            .returning({ productId: productStock.productId })
+            .returning(returnSlug)
         : await db
             .update(productStock)
             .set({ quantity, restockNote })
@@ -189,13 +202,14 @@ export async function updateStock(_: AdminFormState, formData: FormData): Promis
                 eq(productStock.quantity, expectedQuantity),
               ),
             )
-            .returning({ productId: productStock.productId });
+            .returning(returnSlug);
   } catch (error) {
     if (pgCode(error) === FOREIGN_KEY_VIOLATION) {
       return { tone: "error", message: "This product no longer exists." };
     }
     throw error;
   }
+  invalidateProducts(changed.map((row) => row.slug));
   refresh();
   return changed.length === 0
     ? {

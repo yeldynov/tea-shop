@@ -9,7 +9,6 @@ import { requireAdmin } from "@/lib/session";
 import { StockLabel } from "../stock/stock-label";
 
 export const metadata: Metadata = { title: "Products · Admin", robots: { index: false } };
-export const dynamic = "force-dynamic";
 
 export default async function AdminProductsPage() {
   await requireAdmin("/admin/products");

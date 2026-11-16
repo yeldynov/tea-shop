@@ -9,7 +9,8 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import type Stripe from "stripe";
 
 import { db } from "@/db";
-import { orders } from "@/db/schema";
+import { orderItems, orders, products } from "@/db/schema";
+import { invalidateProducts } from "@/lib/catalog-cache";
 import { getStripe } from "@/lib/stripe";
 
 type OrderRow = typeof orders.$inferSelect;
@@ -68,6 +69,14 @@ export async function releaseOrder(orderId: string, status: "failed" | "expired"
     join released r on r.id = i.order_id
     where s.product_id = i.product_id
   `);
+  // Stock changed, so drop the cached product pages. A repeated call (duplicate
+  // webhook) only expires the cache again, which is harmless.
+  const items = await db
+    .select({ slug: products.slug })
+    .from(orderItems)
+    .innerJoin(products, eq(products.id, orderItems.productId))
+    .where(eq(orderItems.orderId, orderId));
+  invalidateProducts(items.map((item) => item.slug));
 }
 
 /**

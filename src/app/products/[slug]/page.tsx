@@ -13,9 +13,6 @@ import { TastingNotes } from "@/components/tasting-notes";
 import { formatPrice, stockState, type Product } from "@/lib/catalog";
 import { getProduct, getRelatedProducts } from "@/lib/catalog-queries";
 
-// Rendered per request so stock is always current; unknown slugs 404 below.
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata({
   params,
 }: PageProps<"/products/[slug]">): Promise<Metadata> {
@@ -29,6 +26,10 @@ export async function generateMetadata({
     openGraph: { title: product.name, description, images: [product.image.src] },
   };
 }
+
+// Reads cookies or the database before anything else, so the page may block
+// instead of streaming from a static shell.
+export const instant = false;
 
 export default async function ProductPage({ params }: PageProps<"/products/[slug]">) {
   const product = await getProduct((await params).slug);

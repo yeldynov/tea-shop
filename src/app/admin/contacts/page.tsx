@@ -4,7 +4,6 @@ import { getAllContacts } from "@/lib/admin-queries";
 import { requireAdmin } from "@/lib/session";
 
 export const metadata: Metadata = { title: "Contacts · Admin", robots: { index: false } };
-export const dynamic = "force-dynamic";
 
 const addedAt = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" });
 

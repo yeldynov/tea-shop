@@ -4,11 +4,11 @@ import { cookies } from "next/headers";
 
 import { CART_COOKIE, clampQuantity, MAX_LINES, maxQuantity, serializeCart } from "@/lib/cart";
 import { readCart } from "@/lib/cart-queries";
-import { getProduct } from "@/lib/catalog-queries";
+import { getLiveStock } from "@/lib/catalog-queries";
 
 // Open to guests: the cart is per browser, so there's nothing to authorize.
-// Every action re-reads stock from the database; quantities from the form are
-// only requests.
+// Every action re-reads stock live from the database (never the product cache);
+// quantities from the form are only requests.
 
 export type CartActionState = { tone: "error" | "success"; message: string } | null;
 
@@ -41,9 +41,10 @@ export async function addToCart(_: CartActionState, formData: FormData): Promise
   const { slug, qty } = readInput(formData);
   if (!slug || !(qty >= 1)) return { tone: "error", message: "Choose a quantity to add." };
 
-  const product = await getProduct(slug);
-  if (!product) return { tone: "error", message: "This product is no longer available." };
-  if (maxQuantity(product.stock) === 0) return { tone: "error", message: "Sold out." };
+  const stock = await getLiveStock(slug);
+  if (stock === undefined)
+    return { tone: "error", message: "This product is no longer available." };
+  if (maxQuantity(stock) === 0) return { tone: "error", message: "Sold out." };
 
   const items = await readCart();
   const existing = items.get(slug) ?? 0;
@@ -51,7 +52,7 @@ export async function addToCart(_: CartActionState, formData: FormData): Promise
     return { tone: "error", message: "Your bag is full. Remove something first." };
   }
   const wanted = existing + qty;
-  const quantity = clampQuantity(wanted, product.stock);
+  const quantity = clampQuantity(wanted, stock);
   if (quantity === existing) {
     return { tone: "error", message: `You already have the most available (${quantity}).` };
   }
@@ -70,8 +71,8 @@ export async function updateCartItem(
   const items = new Map(await readCart());
   if (!slug || !items.has(slug) || Number.isNaN(qty)) return null;
 
-  const product = await getProduct(slug);
-  const quantity = product ? clampQuantity(qty, product.stock) : 0;
+  const stock = await getLiveStock(slug);
+  const quantity = stock === undefined ? 0 : clampQuantity(qty, stock);
   if (quantity === 0) items.delete(slug);
   else items.set(slug, quantity);
   await writeCart(items);

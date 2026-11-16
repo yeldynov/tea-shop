@@ -8,7 +8,6 @@ import { StockForm } from "./stock-form";
 import { StockLabel } from "./stock-label";
 
 export const metadata: Metadata = { title: "Stock · Admin", robots: { index: false } };
-export const dynamic = "force-dynamic";
 
 export default async function AdminStockPage() {
   await requireAdmin("/admin/stock");

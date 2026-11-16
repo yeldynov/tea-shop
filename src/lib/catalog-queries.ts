@@ -1,12 +1,16 @@
-// Catalog reads for server components. Each query is wrapped in React `cache()`
-// so repeated calls within one request (e.g. generateMetadata + page) hit the
-// database once.
+// Catalog reads for server components. List queries are wrapped in React `cache()`
+// so repeated calls within one request hit the database once. `getProduct` is
+// cross-request cached ("use cache", which also dedupes within a request), tagged
+// per product; writers must call `invalidateProducts` (catalog-cache.ts).
+// Rule: display may read the cache, decisions read live (`getLiveStock`).
 import { asc, desc, eq, inArray, sql, type SQL } from "drizzle-orm";
+import { cacheLife, cacheTag } from "next/cache";
 import { cache } from "react";
 
 import { db } from "@/db";
-import { categories, products } from "@/db/schema";
+import { categories, products, productStock } from "@/db/schema";
 import type { Category, Product } from "@/lib/catalog";
+import { productTag } from "@/lib/catalog-cache";
 
 type CategoryRow = typeof categories.$inferSelect;
 
@@ -62,13 +66,30 @@ export const getCategory = cache(async (slug: string) => {
   return row ? toCategory(row) : undefined;
 });
 
-export const getProduct = cache(async (slug: string) => {
+export async function getProduct(slug: string) {
+  "use cache";
+  cacheTag(productTag(slug));
+  // Safety net only: every stock/product write invalidates the tag.
+  cacheLife("hours");
   const row = await db.query.products.findFirst({
     where: eq(products.slug, slug),
     with: withRelations,
   });
   return row ? toProduct(row) : undefined;
-});
+}
+
+/**
+ * Current stock straight from the database, never cached: for decisions (cart
+ * actions), not display. `undefined` means no such product; no stock row means 0.
+ */
+export async function getLiveStock(slug: string) {
+  const [row] = await db
+    .select({ quantity: productStock.quantity })
+    .from(products)
+    .leftJoin(productStock, eq(productStock.productId, products.id))
+    .where(eq(products.slug, slug));
+  return row ? (row.quantity ?? 0) : undefined;
+}
 
 /** Every product, grouped by collection in display order. */
 export const getProducts = cache(async () => {

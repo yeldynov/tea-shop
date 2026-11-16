@@ -29,7 +29,9 @@ Next.js 16 (App Router, React 19) + TypeScript + Tailwind CSS v4, Better Auth, D
   - Money is integer cents (`priceCents`); `formatPrice` takes cents. Never store prices as floats.
   - Stock lives in `product_stock` (1:1 with products), not on `products`, so stock writes don't touch product rows. A missing stock row means sold out.
   - Data that's always read whole with its product (notes, details, brew, gallery) goes in array/JSONB columns, not child tables.
-  - Pages that read the catalog use `export const dynamic = "force-dynamic"`: stock stays current and `next build` must never need `DATABASE_URL`. Add caching later via `cacheComponents` + `"use cache"`, not by prerendering from the DB.
+  - Cache Components is on (`cacheComponents` in `next.config.ts`), so `dynamic`, `revalidate` and `dynamicParams` exports are errors. Catalog pages that read the DB before touching cookies/params (`/`, `/shop`, `/new-arrivals`) start with `await connection()`, which keeps `next build` from needing `DATABASE_URL`. Pages that read cookies/the DB export `instant = false`.
+  - `getProduct` is cached with `"use cache"` + tag `product-<slug>` (`src/lib/catalog-cache.ts`). Anything that changes a product, its collection or its stock must call `invalidateProducts(slugs)`: admin `createProduct`/`updateProduct`/`updateCategory`/`updateStock`, checkout's reservation and `releaseOrder`. Lists, search and the cart read stock live, uncached. Decisions never read the cache: cart actions use `getLiveStock`. `e2e/stock-cache.spec.ts` covers this.
+  - The header's `UserMenu` and `CartMenu` sit in `<Suspense>` (they read cookies), so every page streams after a static shell. The cost: `notFound()` can't change the status (200 + `noindex` instead of 404).
   - Schema changes use versioned migrations: `db:generate`, review the SQL, commit `drizzle/`, then `db:migrate`. Don't use `db:push`.
   - Homepage merchandising picks (bestsellers, spotlight, new arrival) are slug constants in `catalog.ts`, not DB columns.
   - The UI and URLs call categories "collections" (`/collections/*`); the database calls them `categories`.

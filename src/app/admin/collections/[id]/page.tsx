@@ -8,7 +8,6 @@ import { requireAdmin } from "@/lib/session";
 import { CategoryForm, DeleteCategoryForm } from "../category-form";
 
 export const metadata: Metadata = { title: "Edit collection · Admin", robots: { index: false } };
-export const dynamic = "force-dynamic";
 
 export default async function EditCollectionPage({ params }: PageProps<"/admin/collections/[id]">) {
   const { id } = await params;

@@ -7,7 +7,6 @@ import { requireAdmin } from "@/lib/session";
 import { ProductForm } from "../product-form";
 
 export const metadata: Metadata = { title: "New product · Admin", robots: { index: false } };
-export const dynamic = "force-dynamic";
 
 export default async function NewProductPage() {
   await requireAdmin("/admin/products/new");

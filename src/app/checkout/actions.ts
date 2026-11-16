@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { orderItems, orders, productStock } from "@/db/schema";
 import { getCart } from "@/lib/cart-queries";
+import { invalidateProducts } from "@/lib/catalog-cache";
 import { cancelPendingOrder, getPendingOrders, releaseOrder } from "@/lib/orders";
 import { requireUser } from "@/lib/session";
 import { getStripe } from "@/lib/stripe";
@@ -71,6 +72,7 @@ export async function startCheckout() {
     if (isCheckViolation(error)) redirect("/cart?error=stock");
     throw error;
   }
+  invalidateProducts(lines.map((line) => line.product.slug)); // cached stock badges
   // A product with no stock row at all can't be decremented; treat it as sold out.
   if (reserved.length !== lines.length) {
     await releaseOrder(orderId, "expired");

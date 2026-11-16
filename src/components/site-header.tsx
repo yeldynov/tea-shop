@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { CartMenu } from "@/components/cart-menu";
-import { CloseIcon, LogoMark, MenuIcon, SearchIcon } from "@/components/icons";
+import { BagIcon, CloseIcon, LogoMark, MenuIcon, SearchIcon, UserIcon } from "@/components/icons";
 import { UserMenu } from "@/components/user-menu";
 import { mainNav, site } from "@/lib/site";
 
@@ -75,8 +76,29 @@ export function SiteHeader() {
             <Link href="/search" className="btn-icon" aria-label="Search">
               <SearchIcon />
             </Link>
-            <UserMenu />
-            <CartMenu />
+            {/* Session and cart come from cookies. Suspense keeps them from making the whole page dynamic. */}
+            <Suspense
+              fallback={
+                <Link
+                  href="/account"
+                  className="btn-icon hidden sm:inline-flex"
+                  aria-label="Account"
+                >
+                  <UserIcon />
+                </Link>
+              }
+            >
+              <UserMenu />
+            </Suspense>
+            <Suspense
+              fallback={
+                <Link href="/cart" className="btn-icon -mr-2.5" aria-label="Bag">
+                  <BagIcon />
+                </Link>
+              }
+            >
+              <CartMenu />
+            </Suspense>
           </div>
         </div>
       </header>
