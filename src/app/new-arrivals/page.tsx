@@ -1,18 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { connection } from "next/server";
 
 import { ProductCard } from "@/components/product-card";
 import { getNewArrivals } from "@/lib/catalog-queries";
-
-// Rendered per request so the newest products and their stock are always current.
-export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "New arrivals",
   description: "The latest teas and teaware to reach the shop, newest first.",
 };
 
+// Reads cookies or the database before anything else, so the page may block
+// instead of streaming from a static shell.
+export const instant = false;
+
 export default async function NewArrivalsPage() {
+  // Catalog sections read the database (and stock) per request, never at build.
+  await connection();
   const arrivals = await getNewArrivals();
 
   return (

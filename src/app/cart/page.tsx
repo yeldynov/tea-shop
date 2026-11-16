@@ -12,9 +12,6 @@ import { formatPrice } from "@/lib/catalog";
 import { getPendingOrders } from "@/lib/orders";
 import { getSession } from "@/lib/session";
 
-// Per request: the cart comes from the cookie, prices and stock from the database.
-export const dynamic = "force-dynamic";
-
 export const metadata: Metadata = { title: "Your bag" };
 
 const errors = {
@@ -22,6 +19,10 @@ const errors = {
     "Some items sold out or have less stock than your bag asks for. Check your bag and try again.",
   checkout: "We couldn’t start checkout. Please try again in a moment.",
 };
+
+// Reads cookies or the database before anything else, so the page may block
+// instead of streaming from a static shell.
+export const instant = false;
 
 export default async function CartPage({ searchParams }: PageProps<"/cart">) {
   const { error } = await searchParams;

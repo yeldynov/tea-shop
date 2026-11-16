@@ -9,9 +9,6 @@ import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
 import { getCategories, getCategory, getProductsByCategory } from "@/lib/catalog-queries";
 
-// Rendered per request so stock is always current; unknown slugs 404 below.
-export const dynamic = "force-dynamic";
-
 // Collections with a motion loop in place of the header photo.
 const motion: Record<string, string> = {
   puer: "/motion/puer-cake",
@@ -34,6 +31,10 @@ export async function generateMetadata({
     },
   };
 }
+
+// Reads cookies or the database before anything else, so the page may block
+// instead of streaming from a static shell.
+export const instant = false;
 
 export default async function CollectionPage({ params }: PageProps<"/collections/[slug]">) {
   const { slug } = await params;

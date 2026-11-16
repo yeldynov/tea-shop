@@ -1,6 +1,10 @@
 import { AccountNav } from "./account-nav";
 
 // Navigation only. Each page checks the session itself (layouts don't re-run on navigation).
+// Reads cookies or the database before anything else, so the page may block
+// instead of streaming from a static shell.
+export const instant = false;
+
 export default function AccountLayout({ children }: LayoutProps<"/account">) {
   return (
     <div className="container-page section-sm">

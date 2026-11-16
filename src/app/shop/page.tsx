@@ -1,19 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { connection } from "next/server";
 
 import { CategoryPills } from "@/components/home/featured-collections";
 import { ProductCard } from "@/components/product-card";
 import { getProducts } from "@/lib/catalog-queries";
-
-// Rendered per request so stock is always current.
-export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Shop all",
   description: "Every tea and piece of teaware in the shop, from pu’er to gaiwans.",
 };
 
+// Reads cookies or the database before anything else, so the page may block
+// instead of streaming from a static shell.
+export const instant = false;
+
 export default async function ShopPage() {
+  // Catalog sections read the database (and stock) per request, never at build.
+  await connection();
   const products = await getProducts();
 
   return (

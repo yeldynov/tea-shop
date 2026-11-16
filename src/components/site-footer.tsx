@@ -1,7 +1,15 @@
+import { cacheLife } from "next/cache";
 import Link from "next/link";
 
 import { LogoMark } from "@/components/icons";
 import { footerNav, site } from "@/lib/site";
+
+// Cached: reading the clock during prerender is an error under Cache Components.
+async function CurrentYear() {
+  "use cache";
+  cacheLife("days");
+  return new Date().getFullYear();
+}
 
 export function SiteFooter() {
   return (
@@ -42,7 +50,7 @@ export function SiteFooter() {
       <div className="border-t border-cream/15">
         <div className="container-page flex flex-col gap-2 py-6 text-xs text-cream/50 sm:flex-row sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {site.name}
+            © <CurrentYear /> {site.name}
           </p>
           <p>Photography via Unsplash</p>
         </div>

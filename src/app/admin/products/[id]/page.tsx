@@ -10,7 +10,6 @@ import { StockForm } from "../../stock/stock-form";
 import { ProductForm } from "../product-form";
 
 export const metadata: Metadata = { title: "Edit product · Admin", robots: { index: false } };
-export const dynamic = "force-dynamic";
 
 export default async function EditProductPage({ params }: PageProps<"/admin/products/[id]">) {
   const { id } = await params;

@@ -7,9 +7,6 @@ import { ArticleCard } from "@/components/article-card";
 import { SectionHeading } from "@/components/section-heading";
 import { articles, formatDate, getArticle } from "@/lib/journal";
 
-// Articles are static; unknown slugs 404.
-export const dynamicParams = false;
-
 export function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }));
 }

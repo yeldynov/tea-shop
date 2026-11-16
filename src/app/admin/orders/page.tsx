@@ -8,7 +8,6 @@ import { orderStatusLabels } from "@/lib/orders";
 import { requireAdmin } from "@/lib/session";
 
 export const metadata: Metadata = { title: "Orders · Admin", robots: { index: false } };
-export const dynamic = "force-dynamic";
 
 const placedAt = new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" });
 

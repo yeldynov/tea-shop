@@ -7,7 +7,6 @@ import { requireAdmin } from "@/lib/session";
 import { CategoryForm } from "./category-form";
 
 export const metadata: Metadata = { title: "Collections · Admin", robots: { index: false } };
-export const dynamic = "force-dynamic";
 
 export default async function AdminCollectionsPage() {
   await requireAdmin("/admin/collections");

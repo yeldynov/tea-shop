@@ -1,14 +1,13 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { cookies } from "next/headers";
-import { getProduct } from "@/lib/catalog-queries";
+import { getLiveStock } from "@/lib/catalog-queries";
 import { readCart } from "@/lib/cart-queries";
 import { MAX_LINES } from "@/lib/cart";
-import type { Product } from "@/lib/catalog";
 import { addToCart } from "./actions";
 
 vi.mock("next/headers", () => ({ cookies: vi.fn() }));
-vi.mock("@/lib/catalog-queries", () => ({ getProduct: vi.fn() }));
+vi.mock("@/lib/catalog-queries", () => ({ getLiveStock: vi.fn() }));
 vi.mock("@/lib/cart-queries", () => ({ readCart: vi.fn() }));
 
 type Mock = ReturnType<typeof vi.fn>;
@@ -20,10 +19,6 @@ beforeEach(() => {
   vi.mocked(cookies).mockResolvedValue(store as never);
 });
 
-function product(slug: string, stock: number) {
-  return { slug, stock } as Product;
-}
-
 function form(slug: string | null, quantity: string | null) {
   const fd = new FormData();
   if (slug !== null) fd.set("slug", slug);
@@ -32,8 +27,8 @@ function form(slug: string | null, quantity: string | null) {
 }
 
 /** Arrange both inputs: the product's stock (undefined = not found) and the bag. */
-function given(stock: number | undefined, bag: Record<string, number> = {}, slug = "dian-hong") {
-  vi.mocked(getProduct).mockResolvedValue(stock === undefined ? undefined : product(slug, stock));
+function given(stock: number | undefined, bag: Record<string, number> = {}) {
+  vi.mocked(getLiveStock).mockResolvedValue(stock);
   vi.mocked(readCart).mockResolvedValue(new Map(Object.entries(bag)));
 }
 
@@ -50,7 +45,7 @@ describe("addToCart", () => {
       const result = await addToCart(null, form(slug, quantity));
 
       expect(result).toEqual({ tone: "error", message: "Choose a quantity to add." });
-      expect(getProduct).not.toHaveBeenCalled();
+      expect(getLiveStock).not.toHaveBeenCalled();
     });
   });
 
@@ -122,7 +117,7 @@ describe("addToCart", () => {
     });
 
     it("still tops up a line that is already in a full bag", async () => {
-      given(5, fullBag, "tea-0");
+      given(5, fullBag);
 
       const result = await addToCart(null, form("tea-0", "1"));
 

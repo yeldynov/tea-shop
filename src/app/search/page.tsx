@@ -7,9 +7,6 @@ import { SearchIcon } from "@/components/icons";
 import { ProductCard } from "@/components/product-card";
 import { searchProducts } from "@/lib/catalog-queries";
 
-// Results read the catalog on every request.
-export const dynamic = "force-dynamic";
-
 function readQuery(value: string | string[] | undefined) {
   return (Array.isArray(value) ? value[0] : value)?.trim().slice(0, 100) ?? "";
 }
@@ -21,6 +18,10 @@ export async function generateMetadata({ searchParams }: PageProps<"/search">): 
     robots: { index: false },
   };
 }
+
+// Reads cookies or the database before anything else, so the page may block
+// instead of streaming from a static shell.
+export const instant = false;
 
 export default async function SearchPage({ searchParams }: PageProps<"/search">) {
   const q = readQuery((await searchParams).q);
